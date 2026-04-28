@@ -1,0 +1,25 @@
+@model MensajeContacto
+@{ ViewData["Title"] = $"Mensaje de {Model.Nombre}"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>@Model.Nombre</h1>
+        <p>@Model.Email · @Model.FechaCreacion.ToString("dddd dd MMMM yyyy HH:mm")</p>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--outline" href="/admin/mensajes">← Volver</a>
+        <a class="pd-btn pd-btn--blue" href="mailto:@Model.Email?subject=Re: @(Model.Asunto)">Responder</a>
+    </div>
+</header>
+
+<div class="pd-card">
+    <h3>@(Model.Asunto ?? "(sin asunto)")</h3>
+    <p class="pd-muted">Origen: @(Model.Origen ?? "—") · Teléfono: @(Model.Telefono ?? "—")</p>
+    <hr>
+    <p style="white-space: pre-wrap; line-height: 1.7;">@Model.Mensaje</p>
+
+    <form asp-area="Admin" asp-controller="MensajesAdmin" asp-action="Eliminar" asp-route-id="@Model.Id" method="post" style="margin-top: 24px;" onsubmit="return confirm('¿Eliminar este mensaje?');">
+        @Html.AntiForgeryToken()
+        <button class="pd-btn pd-btn--outline pd-btn--danger pd-btn--sm" type="submit">Eliminar mensaje</button>
+    </form>
+</div>

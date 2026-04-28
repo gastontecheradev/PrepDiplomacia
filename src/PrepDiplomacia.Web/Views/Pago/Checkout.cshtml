@@ -1,0 +1,43 @@
+@model PrepDiplomacia.Domain.Entities.Inscripcion
+@{
+    ViewData["Title"] = "Procesando pago";
+}
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Pago</div>
+        <h1 class="pd-h1 pd-h1--inverse">Estamos preparando tu pago</h1>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap" style="max-width: 720px;">
+        @if (ViewBag.StripeNoConfigurado == true)
+        {
+            <div class="pd-alert pd-alert--info">
+                <h3>Pago aún no disponible</h3>
+                <p>La pasarela de pago todavía no fue configurada. Tu inscripción quedó registrada en el sistema y nos pondremos en contacto a la brevedad para indicarte los pasos siguientes.</p>
+                @if (Model is not null)
+                {
+                    <p><strong>Inscripción Nº:</strong> @Model.Id<br/><strong>Email:</strong> @Model.Email</p>
+                }
+            </div>
+        }
+        else if (ViewBag.ErrorStripe is string err)
+        {
+            <div class="pd-alert pd-alert--error">
+                <h3>Hubo un problema</h3>
+                <p>@err</p>
+                <p>Tu inscripción quedó guardada. Podés reintentar el pago en breve, o escribirnos a <a href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>.</p>
+            </div>
+        }
+        else
+        {
+            <p class="pd-lead">Te estamos redirigiendo a la pasarela de pago segura…</p>
+        }
+
+        <p style="margin-top: 24px;">
+            <a class="pd-btn pd-btn--outline" asp-controller="Inscripcion" asp-action="Index">← Volver</a>
+        </p>
+    </div>
+</section>

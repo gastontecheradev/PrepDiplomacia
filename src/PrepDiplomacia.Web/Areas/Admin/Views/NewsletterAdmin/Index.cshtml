@@ -1,0 +1,51 @@
+@model List<SuscriptorNewsletter>
+@{ ViewData["Title"] = "Suscriptores"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Suscriptores del newsletter</h1>
+        <p>@Model.Count(s => !s.DadoDeBaja) suscriptores activos.</p>
+    </div>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="pd-empty"><p>Aún no hay suscriptores.</p></div>
+}
+else
+{
+    <table class="pd-table">
+        <thead>
+            <tr><th>Email</th><th>Nombre</th><th>Origen</th><th>Estado</th><th>Fecha</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var s in Model)
+        {
+            <tr class="@(s.DadoDeBaja ? "pd-table__row--off" : "")">
+                <td>@s.Email</td>
+                <td>@(s.Nombre ?? "—")</td>
+                <td>@(s.Origen ?? "—")</td>
+                <td>
+                    @if (s.DadoDeBaja) { <span class="pd-pill pd-pill--off">Dado de baja</span> }
+                    else if (s.Confirmado) { <span class="pd-pill pd-pill--ok">Confirmado</span> }
+                    else { <span class="pd-pill pd-pill--pending">Pendiente</span> }
+                </td>
+                <td>@s.FechaCreacion.ToString("dd MMM yyyy")</td>
+                <td>
+                    @if (!s.DadoDeBaja)
+                    {
+                        <form asp-area="Admin" asp-controller="NewsletterAdmin" asp-action="DarDeBaja" asp-route-id="@s.Id" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <button class="pd-link" type="submit">Dar de baja</button>
+                        </form>
+                    }
+                    <form asp-area="Admin" asp-controller="NewsletterAdmin" asp-action="Eliminar" asp-route-id="@s.Id" method="post" style="display:inline" onsubmit="return confirm('¿Eliminar permanentemente?');">
+                        @Html.AntiForgeryToken()
+                        <button class="pd-link pd-link--danger" type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

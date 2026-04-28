@@ -1,0 +1,36 @@
+@model List<Inscripcion>
+@{ ViewData["Title"] = "Inscripciones"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Inscripciones</h1>
+        <p>@Model.Count inscripciones registradas.</p>
+    </div>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="pd-empty"><p>Aún no hay inscripciones.</p></div>
+}
+else
+{
+    <table class="pd-table">
+        <thead>
+            <tr><th>Nombre</th><th>Email</th><th>Plan</th><th>Modalidad</th><th>Estado</th><th>Fecha</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td><strong>@i.NombreCompleto</strong></td>
+                <td>@i.Email</td>
+                <td>@i.PlanCurso?.Nombre</td>
+                <td>@i.ModalidadElegida</td>
+                <td><span class="pd-pill pd-pill--@(i.Estado.ToString().ToLower())">@i.Estado</span></td>
+                <td>@i.FechaCreacion.ToString("dd MMM yyyy")</td>
+                <td><a class="pd-link" href="/admin/inscripciones/@i.Id">Ver</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

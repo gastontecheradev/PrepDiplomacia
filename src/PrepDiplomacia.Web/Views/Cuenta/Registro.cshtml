@@ -1,0 +1,43 @@
+@model RegistroAlumnoViewModel
+@{ ViewData["Title"] = "Crear cuenta"; }
+
+<section class="pd-section">
+    <div class="pd-wrap" style="max-width: 480px;">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Registro</div>
+            <h1 class="pd-h2">Crear una cuenta</h1>
+            <p class="pd-lead">Crear cuenta no es lo mismo que inscribirse. Para acceder al programa también deberás completar el formulario de inscripción y el pago.</p>
+        </div>
+
+        <form asp-controller="Cuenta" asp-action="Registro" method="post" class="pd-form">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
+
+            <div class="pd-form__field">
+                <label asp-for="NombreCompleto"></label>
+                <input asp-for="NombreCompleto" />
+                <span asp-validation-for="NombreCompleto"></span>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" autocomplete="email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" autocomplete="new-password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="ConfirmarPassword"></label>
+                <input asp-for="ConfirmarPassword" type="password" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmarPassword"></span>
+            </div>
+
+            <button type="submit" class="pd-btn pd-btn--blue">Crear cuenta</button>
+            <p style="margin-top: 16px;">¿Ya tenés cuenta? <a class="pd-link" asp-controller="Cuenta" asp-action="Login">Ingresar</a></p>
+        </form>
+    </div>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,113 @@
+@model InscripcionViewModel
+@{
+    ViewData["Title"] = "Inscripción";
+}
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Edición 2027</div>
+        <h1 class="pd-h1 pd-h1--inverse">Inscripción al programa</h1>
+        <p class="pd-lead pd-lead--inverse">Completá tus datos, elegí el plan y avanzá al pago para activar tu acceso.</p>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Planes disponibles</div>
+            <h2 class="pd-h2">Elegí tu plan</h2>
+        </div>
+
+        <form asp-controller="Inscripcion" asp-action="Iniciar" method="post" class="pd-form">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
+
+            <div class="pd-grid pd-grid--3 pd-planes">
+                @foreach (var plan in Model.PlanesDisponibles)
+                {
+                    var caracteristicas = (plan.Caracteristicas ?? "")
+                        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(c => c.Trim()).Where(c => !string.IsNullOrEmpty(c));
+                    <label class="pd-plan @(plan.Destacado ? "pd-plan--destacado" : "")">
+                        <input type="radio" name="PlanCursoId" value="@plan.Id"
+                               checked="@(Model.PlanCursoId == plan.Id || (Model.PlanCursoId == 0 && plan.Destacado))" />
+                        @if (plan.Destacado)
+                        {
+                            <span class="pd-plan__badge">Recomendado</span>
+                        }
+                        <h3>@plan.Nombre</h3>
+                        <p class="pd-plan__desc">@plan.Descripcion</p>
+                        <div class="pd-plan__precio">
+                            <span class="pd-plan__valor">@plan.PrecioTotal.ToString("N0") @plan.Moneda.ToUpper()</span>
+                            @if (plan.ModalidadPago == ModalidadPago.Cuotas && plan.CantidadCuotas.HasValue)
+                            {
+                                <small>en @plan.CantidadCuotas cuotas mensuales</small>
+                            }
+                            else
+                            {
+                                <small>pago único</small>
+                            }
+                        </div>
+                        <ul class="pd-plan__feats">
+                            @foreach (var f in caracteristicas)
+                            {
+                                <li>@f</li>
+                            }
+                        </ul>
+                    </label>
+                }
+            </div>
+            <span asp-validation-for="PlanCursoId" class="pd-form__field-error"></span>
+
+            <div class="pd-form__seccion">
+                <h2 class="pd-h2 pd-h2--small">Tus datos</h2>
+
+                <div class="pd-form__grid">
+                    <div class="pd-form__field">
+                        <label asp-for="NombreCompleto"></label>
+                        <input asp-for="NombreCompleto" />
+                        <span asp-validation-for="NombreCompleto"></span>
+                    </div>
+                    <div class="pd-form__field">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" type="email" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="pd-form__field">
+                        <label asp-for="Telefono"></label>
+                        <input asp-for="Telefono" />
+                        <span asp-validation-for="Telefono"></span>
+                    </div>
+                    <div class="pd-form__field">
+                        <label asp-for="FormacionAcademica"></label>
+                        <input asp-for="FormacionAcademica" placeholder="Ej. Relaciones Internacionales, 4º año" />
+                        <span asp-validation-for="FormacionAcademica"></span>
+                    </div>
+                    <div class="pd-form__field pd-form__field--full">
+                        <label asp-for="Consulta"></label>
+                        <textarea asp-for="Consulta" rows="4" placeholder="Si querés agregar alguna consulta puntual…"></textarea>
+                        <span asp-validation-for="Consulta"></span>
+                    </div>
+                </div>
+
+                <div class="pd-form__check">
+                    <input asp-for="AceptaTerminos" type="checkbox" />
+                    <label asp-for="AceptaTerminos">
+                        Acepto los <a asp-controller="Legal" asp-action="Terminos" target="_blank">Términos y Condiciones</a>
+                        y la <a asp-controller="Legal" asp-action="Privacidad" target="_blank">Política de Privacidad</a>.
+                    </label>
+                </div>
+                <span asp-validation-for="AceptaTerminos"></span>
+            </div>
+
+            <div class="pd-form__actions">
+                <button type="submit" class="pd-btn pd-btn--blue">Continuar al pago →</button>
+                <small class="pd-form__hint">Al continuar serás redirigido a la pasarela de pago segura de Stripe.</small>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,47 @@
+@model List<PostBlog>
+@{ ViewData["Title"] = "Publicaciones"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Publicaciones</h1>
+        <p>Gestioná los posts del blog.</p>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--blue" href="/admin/blog/nuevo">+ Nueva publicación</a>
+        <a class="pd-btn pd-btn--outline" href="/admin/blog/comentarios">Comentarios</a>
+    </div>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="pd-empty">
+        <p>Aún no creaste publicaciones. <a href="/admin/blog/nuevo">Crear la primera</a>.</p>
+    </div>
+}
+else
+{
+    <table class="pd-table">
+        <thead>
+            <tr><th>Título</th><th>Categoría</th><th>Estado</th><th>Publicado</th><th>Vistas</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td><strong>@p.Titulo</strong><br><small>/blog/@p.Slug</small></td>
+                <td>@(p.Categoria?.Nombre ?? "—")</td>
+                <td><span class="pd-pill pd-pill--@(p.Estado.ToString().ToLower())">@p.Estado</span></td>
+                <td>@(p.FechaPublicacion?.ToString("dd MMM yyyy") ?? "—")</td>
+                <td>@p.Vistas</td>
+                <td>
+                    <a class="pd-link" href="/admin/blog/editar/@p.Id">Editar</a>
+                    <form asp-area="Admin" asp-controller="Blog" asp-action="Eliminar" asp-route-id="@p.Id" method="post" style="display:inline" onsubmit="return confirm('¿Eliminar definitivamente esta publicación?');">
+                        @Html.AntiForgeryToken()
+                        <button class="pd-link pd-link--danger" type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

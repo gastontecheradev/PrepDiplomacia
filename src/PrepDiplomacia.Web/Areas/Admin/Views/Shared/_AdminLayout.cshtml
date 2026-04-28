@@ -1,0 +1,53 @@
+@inject UserManager<UsuarioAplicacion> UserManager
+@{
+    var usuario = await UserManager.GetUserAsync(User);
+    var ruta = Context.Request.Path.Value?.ToLowerInvariant() ?? "";
+    string EsActivo(string r) => ruta.StartsWith(r) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(ViewData["Title"] ?? "Admin") · Prep Diplomacia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@@400;600;700&family=Lato:wght@@400;600&family=Montserrat:wght@@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="pd-admin">
+    <aside class="pd-admin__sidebar">
+        <div class="pd-admin__brand">
+            <img src="~/img/logo.png" alt="Prep Diplomacia" />
+            <span>Admin</span>
+        </div>
+        <nav class="pd-admin__nav">
+            <a class="@EsActivo("/admin/dashboard") @EsActivo("/admin")" href="/admin">Dashboard</a>
+            <a class="@EsActivo("/admin/blog")" href="/admin/blog">Blog</a>
+            <a class="@EsActivo("/admin/categorias")" href="/admin/categorias">Categorías y tags</a>
+            <a class="@EsActivo("/admin/contenido")" href="/admin/contenido">Contenido del sitio</a>
+            <a class="@EsActivo("/admin/inscripciones")" href="/admin/inscripciones">Inscripciones</a>
+            <a class="@EsActivo("/admin/newsletter")" href="/admin/newsletter">Newsletter</a>
+            <a class="@EsActivo("/admin/mensajes")" href="/admin/mensajes">Mensajes</a>
+            <a class="@EsActivo("/admin/blog/comentarios")" href="/admin/blog/comentarios">Comentarios</a>
+        </nav>
+        <div class="pd-admin__user">
+            <div>@(usuario?.NombreCompleto ?? usuario?.Email)</div>
+            <small><a href="/cuenta/cambiar-password">Cambiar contraseña</a></small>
+            <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin-top: 8px;">
+                @Html.AntiForgeryToken()
+                <button class="pd-btn pd-btn--outline pd-btn--sm" type="submit">Salir</button>
+            </form>
+            <small style="margin-top: 12px; display:block;"><a href="/" target="_blank">↗ Ver sitio público</a></small>
+        </div>
+    </aside>
+
+    <main class="pd-admin__main">
+        @if (TempData["Ok"] is string ok)        { <div class="pd-toast pd-toast--ok">@ok</div> }
+        @if (TempData["Error"] is string err)    { <div class="pd-toast pd-toast--err">@err</div> }
+        @RenderBody()
+    </main>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

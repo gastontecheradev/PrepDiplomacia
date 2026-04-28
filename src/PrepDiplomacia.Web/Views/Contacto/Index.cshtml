@@ -1,0 +1,61 @@
+@model ContactoViewModel
+@{ ViewData["Title"] = "Contacto"; }
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Contacto</div>
+        <h1 class="pd-h1 pd-h1--inverse">Hablemos</h1>
+        <p class="pd-lead pd-lead--inverse">Para consultas sobre el programa, el concurso o el proceso de inscripción.</p>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap pd-grid pd-grid--side" style="align-items: start;">
+        <form asp-controller="Contacto" asp-action="Enviar" method="post" class="pd-form">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
+
+            <div class="pd-form__grid">
+                <div class="pd-form__field">
+                    <label>Nombre</label>
+                    <input asp-for="Nombre" />
+                    <span asp-validation-for="Nombre"></span>
+                </div>
+                <div class="pd-form__field">
+                    <label>Correo</label>
+                    <input asp-for="Email" type="email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="pd-form__field">
+                    <label>Teléfono (opcional)</label>
+                    <input asp-for="Telefono" />
+                </div>
+                <div class="pd-form__field">
+                    <label>Asunto</label>
+                    <input asp-for="Asunto" />
+                </div>
+                <div class="pd-form__field pd-form__field--full">
+                    <label>Mensaje</label>
+                    <textarea asp-for="Mensaje" rows="6"></textarea>
+                    <span asp-validation-for="Mensaje"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="pd-btn pd-btn--blue">Enviar mensaje</button>
+        </form>
+
+        <aside class="pd-aside">
+            <div class="pd-card">
+                <h3>Datos de contacto</h3>
+                <a class="pd-link" href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>
+                <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a>
+            </div>
+            <div class="pd-card">
+                <h3>Tiempo de respuesta</h3>
+                <p>Respondemos las consultas en un plazo de hasta 48 horas hábiles.</p>
+            </div>
+        </aside>
+    </div>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

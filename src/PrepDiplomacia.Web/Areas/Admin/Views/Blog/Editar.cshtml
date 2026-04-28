@@ -1,0 +1,121 @@
+@model PostEditarViewModel
+@{ ViewData["Title"] = Model.Id == 0 ? "Nueva publicación" : "Editar publicación"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>@(Model.Id == 0 ? "Nueva publicación" : "Editar publicación")</h1>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--outline" href="/admin/blog">← Volver</a>
+    </div>
+</header>
+
+<form asp-area="Admin" asp-controller="Blog" asp-action="Guardar" method="post" enctype="multipart/form-data" class="pd-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImagenActual" />
+    <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
+
+    <div class="pd-grid pd-grid--admin-edit">
+        <div>
+            <div class="pd-form__field">
+                <label asp-for="Titulo"></label>
+                <input asp-for="Titulo" />
+                <span asp-validation-for="Titulo"></span>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="Resumen"></label>
+                <textarea asp-for="Resumen" rows="3"></textarea>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="Contenido"></label>
+                <textarea asp-for="Contenido" rows="20" id="editor-contenido"></textarea>
+                <small class="pd-muted">Podés usar HTML. Tip: usá <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;&lt;li&gt;</code>, <code>&lt;blockquote&gt;</code>, <code>&lt;img&gt;</code>.</small>
+            </div>
+
+            <div class="pd-form__grid">
+                <div class="pd-form__field">
+                    <label asp-for="MetaTitulo"></label>
+                    <input asp-for="MetaTitulo" />
+                </div>
+                <div class="pd-form__field">
+                    <label asp-for="MetaDescripcion"></label>
+                    <input asp-for="MetaDescripcion" />
+                </div>
+            </div>
+        </div>
+
+        <aside>
+            <div class="pd-card">
+                <h3>Estado</h3>
+                <div class="pd-form__field">
+                    <label asp-for="Estado"></label>
+                    <select asp-for="Estado">
+                        @foreach (var v in Enum.GetValues<EstadoPublicacion>())
+                        {
+                            <option value="@((int)v)">@v</option>
+                        }
+                    </select>
+                </div>
+                <div class="pd-form__check">
+                    <input asp-for="ComentariosHabilitados" type="checkbox" />
+                    <label asp-for="ComentariosHabilitados"></label>
+                </div>
+                <button type="submit" class="pd-btn pd-btn--blue" style="width:100%; margin-top: 10px;">Guardar</button>
+            </div>
+
+            <div class="pd-card">
+                <h3>Imagen destacada</h3>
+                @if (!string.IsNullOrEmpty(Model.ImagenActual))
+                {
+                    <img src="@Model.ImagenActual" alt="Imagen actual" style="width:100%; margin-bottom: 10px;" />
+                }
+                <div class="pd-form__field">
+                    <input asp-for="Imagen" type="file" accept="image/*" />
+                </div>
+                <div class="pd-form__field">
+                    <label asp-for="ImagenAlt"></label>
+                    <input asp-for="ImagenAlt" />
+                </div>
+            </div>
+
+            <div class="pd-card">
+                <h3>Video YouTube (opcional)</h3>
+                <div class="pd-form__field">
+                    <label asp-for="YouTubeVideoId"></label>
+                    <input asp-for="YouTubeVideoId" placeholder="dQw4w9WgXcQ" />
+                    <small class="pd-muted">Pegá el ID del video, no la URL completa.</small>
+                </div>
+            </div>
+
+            <div class="pd-card">
+                <h3>Categoría y etiquetas</h3>
+                <div class="pd-form__field">
+                    <label asp-for="CategoriaId"></label>
+                    <select asp-for="CategoriaId">
+                        <option value="">— Sin categoría —</option>
+                        @foreach (var c in Model.Categorias)
+                        {
+                            <option value="@c.Id">@c.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="pd-form__field">
+                    <label>Tags</label>
+                    <div class="pd-checks">
+                        @foreach (var t in Model.Tags)
+                        {
+                            <label class="pd-check">
+                                <input type="checkbox" name="TagsSeleccionados" value="@t.Id"
+                                       checked="@(Model.TagsSeleccionados.Contains(t.Id))" />
+                                <span>@t.Nombre</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

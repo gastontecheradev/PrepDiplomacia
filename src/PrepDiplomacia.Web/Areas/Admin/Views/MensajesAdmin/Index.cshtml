@@ -1,0 +1,33 @@
+@model List<MensajeContacto>
+@{ ViewData["Title"] = "Mensajes"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Mensajes recibidos</h1>
+        <p>@Model.Count(m => !m.Leido) sin leer.</p>
+    </div>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="pd-empty"><p>No hay mensajes.</p></div>
+}
+else
+{
+    <table class="pd-table">
+        <thead><tr><th>De</th><th>Asunto</th><th>Origen</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var m in Model)
+        {
+            <tr class="@(m.Leido ? "" : "pd-table__row--bold")">
+                <td>@m.Nombre <small class="pd-muted">@m.Email</small></td>
+                <td>@(m.Asunto ?? "(sin asunto)")</td>
+                <td>@(m.Origen ?? "—")</td>
+                <td>@(m.Leido ? "Leído" : "Nuevo")</td>
+                <td>@m.FechaCreacion.ToString("dd MMM HH:mm")</td>
+                <td><a class="pd-link" href="/admin/mensajes/@m.Id">Ver</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

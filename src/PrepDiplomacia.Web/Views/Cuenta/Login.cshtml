@@ -1,0 +1,44 @@
+@model LoginViewModel
+@{ ViewData["Title"] = "Ingresar"; }
+
+<section class="pd-section">
+    <div class="pd-wrap" style="max-width: 460px;">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Ingresar</div>
+            <h1 class="pd-h2">Iniciar sesión</h1>
+        </div>
+
+        <form asp-controller="Cuenta" asp-action="Login" method="post" class="pd-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UrlRetorno" />
+            <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
+
+            <div class="pd-form__field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" autocomplete="email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="pd-form__field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" autocomplete="current-password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="pd-form__check">
+                <input asp-for="RecordarSesion" type="checkbox" />
+                <label asp-for="RecordarSesion"></label>
+            </div>
+
+            <button type="submit" class="pd-btn pd-btn--blue">Ingresar</button>
+
+            <p style="margin-top: 16px;">
+                <a class="pd-link" asp-controller="Cuenta" asp-action="RecuperarPassword">¿Olvidaste tu contraseña?</a>
+            </p>
+            <p>
+                ¿Aún no tenés cuenta?
+                <a class="pd-link" asp-controller="Cuenta" asp-action="Registro">Registrate</a>
+            </p>
+        </form>
+    </div>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

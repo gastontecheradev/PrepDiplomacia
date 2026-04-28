@@ -1,0 +1,41 @@
+@model List<ComentarioBlog>
+@{ ViewData["Title"] = "Comentarios pendientes"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Comentarios pendientes</h1>
+        <p>Aprobá o eliminá los comentarios antes de que aparezcan en el sitio.</p>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--outline" href="/admin/blog">← Publicaciones</a>
+    </div>
+</header>
+
+@if (!Model.Any())
+{
+    <div class="pd-empty"><p>Sin comentarios pendientes. ✨</p></div>
+}
+else
+{
+    @foreach (var c in Model)
+    {
+        <div class="pd-comment-mod">
+            <div class="pd-comment-mod__head">
+                <strong>@c.NombreAutor</strong>
+                <small>@c.EmailAutor · @c.FechaCreacion.ToString("dd MMM yyyy HH:mm")</small>
+                <small>en <a href="/admin/blog/editar/@c.PostBlogId">@c.PostBlog.Titulo</a></small>
+            </div>
+            <p>@c.Contenido</p>
+            <div class="pd-comment-mod__actions">
+                <form asp-area="Admin" asp-controller="Blog" asp-action="AprobarComentario" asp-route-id="@c.Id" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="pd-btn pd-btn--blue pd-btn--sm">Aprobar</button>
+                </form>
+                <form asp-area="Admin" asp-controller="Blog" asp-action="EliminarComentario" asp-route-id="@c.Id" method="post" style="display:inline" onsubmit="return confirm('¿Eliminar este comentario?');">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="pd-btn pd-btn--outline pd-btn--sm pd-btn--danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    }
+}

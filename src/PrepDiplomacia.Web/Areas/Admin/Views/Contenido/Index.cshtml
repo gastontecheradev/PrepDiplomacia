@@ -1,0 +1,42 @@
+@model Dictionary<string, List<BloqueContenido>>
+@{ ViewData["Title"] = "Contenido editable"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Contenido editable</h1>
+        <p>Editá los textos visibles del sitio público sin tocar código.</p>
+    </div>
+</header>
+
+@foreach (var grupo in Model)
+{
+    <section class="pd-card" style="margin-bottom: 24px;">
+        <h2 class="pd-h2 pd-h2--small">@grupo.Key</h2>
+        @foreach (var b in grupo.Value)
+        {
+            <form asp-area="Admin" asp-controller="Contenido" asp-action="Guardar" method="post" class="pd-bloque">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Id" value="@b.Id" />
+                <input type="hidden" name="Etiqueta" value="@b.Etiqueta" />
+                <input type="hidden" name="Clave" value="@b.Clave" />
+                <input type="hidden" name="Tipo" value="@b.Tipo" />
+                <input type="hidden" name="Seccion" value="@b.Seccion" />
+
+                <label class="pd-bloque__label">@b.Etiqueta <small class="pd-muted">@b.Clave</small></label>
+                @if (b.Tipo == "html" || b.Tipo == "parrafo")
+                {
+                    <textarea name="Valor" rows="@(b.Tipo == "html" ? 8 : 4)">@b.Valor</textarea>
+                }
+                else
+                {
+                    <input name="Valor" value="@b.Valor" />
+                }
+                @if (!string.IsNullOrEmpty(b.Ayuda))
+                {
+                    <small class="pd-muted">@b.Ayuda</small>
+                }
+                <button type="submit" class="pd-btn pd-btn--blue pd-btn--sm">Guardar</button>
+            </form>
+        }
+    </section>
+}

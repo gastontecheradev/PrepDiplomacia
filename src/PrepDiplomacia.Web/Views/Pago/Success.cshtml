@@ -1,0 +1,35 @@
+@model PrepDiplomacia.Domain.Entities.Inscripcion?
+@{
+    ViewData["Title"] = "Pago confirmado";
+    var yaActiva = ViewBag.YaActiva == true;
+}
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>¡Pago recibido!</div>
+        <h1 class="pd-h1 pd-h1--inverse">Gracias por inscribirte</h1>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap" style="max-width: 720px;">
+        @if (yaActiva)
+        {
+            <div class="pd-alert pd-alert--ok">
+                <h3>Tu acceso al área de alumnos ya quedó habilitado</h3>
+                <p>Te enviamos un correo con instrucciones para definir tu contraseña.</p>
+            </div>
+            <p>
+                <a class="pd-btn pd-btn--blue" asp-controller="AreaAlumnos" asp-action="Index">Ingresar al área de alumnos</a>
+            </p>
+        }
+        else
+        {
+            <div class="pd-alert pd-alert--info">
+                <h3>Estamos confirmando tu pago</h3>
+                <p>El sistema procesa los pagos en cuestión de segundos. En breve recibirás un correo con tus credenciales para acceder al área de alumnos.</p>
+                <p>Si pasados 10 minutos no recibís el correo, escribinos a <a href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>.</p>
+            </div>
+        }
+    </div>
+</section>

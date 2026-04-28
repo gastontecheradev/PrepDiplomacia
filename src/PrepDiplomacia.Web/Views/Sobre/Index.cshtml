@@ -1,0 +1,77 @@
+@inject IContenidoService Contenido
+@{
+    ViewData["Title"] = "Sobre Prep";
+    var intro       = await Contenido.ObtenerAsync("sobre.intro", "");
+    var trayectoria = await Contenido.ObtenerAsync("sobre.trayectoria", "");
+    var porQue      = await Contenido.ObtenerAsync("sobre.por_que_existe", "");
+    var enfoque     = await Contenido.ObtenerAsync("sobre.enfoque", "");
+}
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Sobre Prep</div>
+        <h1 class="pd-h1 pd-h1--inverse">Carolina Techera</h1>
+        <p class="pd-lead pd-lead--inverse">@intro</p>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap pd-grid pd-grid--side" style="align-items: start;">
+        <div>
+            <article class="pd-bio">
+                <h2 class="pd-h2">Trayectoria</h2>
+                <div class="pd-prose">@Html.Raw(trayectoria)</div>
+            </article>
+            <article class="pd-bio">
+                <h2 class="pd-h2">Por qué existe Prep Diplomacia</h2>
+                <div class="pd-prose">@Html.Raw(porQue)</div>
+            </article>
+            <article class="pd-bio">
+                <h2 class="pd-h2">Enfoque pedagógico</h2>
+                <div class="pd-prose">@Html.Raw(enfoque)</div>
+            </article>
+        </div>
+        <aside class="pd-aside">
+            <div class="pd-card">
+                <h3>Formación y experiencia</h3>
+                <ul class="pd-list">
+                    <li>Ex diplomática del Servicio Exterior del Uruguay.</li>
+                    <li>Ex Cónsul en París.</li>
+                    <li>Internacionalista y consultora en relaciones internacionales.</li>
+                    <li>Especialización en diplomacia y política exterior.</li>
+                </ul>
+            </div>
+            <div class="pd-card">
+                <h3>Contacto</h3>
+                <p>Para consultas sobre el programa 2027 o el proceso de inscripción:</p>
+                <a class="pd-link" href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>
+                <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="pd-section pd-section--gris">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Valores</div>
+            <h2 class="pd-h2">Valores del programa</h2>
+        </div>
+        <div class="pd-grid pd-grid--2">
+            <div class="pd-insight"><h3>Excelencia</h3><p>El programa trabaja con el nivel de rigor que el concurso exige.</p></div>
+            <div class="pd-insight"><h3>Experiencia</h3><p>La formación está construida desde la trayectoria real en el Servicio Exterior uruguayo.</p></div>
+            <div class="pd-insight"><h3>Estrategia</h3><p>La metodología está diseñada para que cada hora de preparación tenga el mayor impacto sobre el resultado final.</p></div>
+            <div class="pd-insight"><h3>Integridad</h3><p>El programa promueve los principios éticos que fundamentan la carrera diplomática.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="pd-cta">
+    <div class="pd-wrap pd-cta__inner">
+        <h2 class="pd-h2 pd-h2--inverse">¿Te interesa el programa?</h2>
+        <p class="pd-lead pd-lead--inverse">Escribinos para recibir información detallada.</p>
+        <div class="pd-cta-row pd-cta-row--center">
+            <a class="pd-btn pd-btn--gold" asp-controller="Contacto" asp-action="Index">Obtener más información</a>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,10 @@
+@{ ViewData["Title"] = "Error"; }
+
+<section class="pd-section">
+    <div class="pd-wrap" style="max-width: 600px; text-align: center;">
+        <div class="pd-eyebrow pd-eyebrow--center"><span class="pd-eyebrow__line"></span>@(ViewBag.Codigo ?? "Error")</div>
+        <h1 class="pd-h2">Algo no salió como esperábamos</h1>
+        <p class="pd-lead">Probá recargar la página. Si el problema persiste, escribinos a <a href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>.</p>
+        <a class="pd-btn pd-btn--blue" asp-controller="Home" asp-action="Index">Volver al inicio</a>
+    </div>
+</section>

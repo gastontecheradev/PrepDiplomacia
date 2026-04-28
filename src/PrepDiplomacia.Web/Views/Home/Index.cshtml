@@ -1,0 +1,187 @@
+@model List<PostBlog>
+@inject IContenidoService Contenido
+@{
+    ViewData["Title"] = "Inicio";
+
+    var heroEyebrow   = await Contenido.ObtenerAsync("home.hero.eyebrow",   "Concurso MRREE 2027");
+    var heroT1        = await Contenido.ObtenerAsync("home.hero.titulo1",   "Prep");
+    var heroT2        = await Contenido.ObtenerAsync("home.hero.titulo2",   "Diplomacia");
+    var heroDesc      = await Contenido.ObtenerAsync("home.hero.descripcion","Formación especializada para el Concurso de Ingreso al Servicio Exterior de Uruguay.");
+
+    var porqueEyebrow = await Contenido.ObtenerAsync("home.porque.eyebrow", "Por qué elegirnos");
+    var porqueTitulo  = await Contenido.ObtenerAsync("home.porque.titulo",  "Por qué Prep Diplomacia");
+    var porqueIntro   = await Contenido.ObtenerAsync("home.porque.intro",   "");
+
+    string Card(int i, string defaultT, string defaultD) =>
+        Contenido.ObtenerAsync($"home.porque.card{i}.titulo", defaultT).Result;
+
+    var c1t = await Contenido.ObtenerAsync("home.porque.card1.titulo", "Acompañamiento completo");
+    var c1d = await Contenido.ObtenerAsync("home.porque.card1.texto",  "Preparación de las seis pruebas con simulacros corregidos y devolución personalizada.");
+    var c2t = await Contenido.ObtenerAsync("home.porque.card2.titulo", "Dirección con experiencia real");
+    var c2d = await Contenido.ObtenerAsync("home.porque.card2.texto",  "Coordinación a cargo de Carolina Techera, ex funcionaria del Servicio Exterior y ex Cónsul en París.");
+    var c3t = await Contenido.ObtenerAsync("home.porque.card3.titulo", "Metodología de aula invertida");
+    var c3d = await Contenido.ObtenerAsync("home.porque.card3.texto",  "El estudiante trabaja el material teórico antes de cada clase. Las sesiones profundizan y ejercitan.");
+
+    var ctaTitulo = await Contenido.ObtenerAsync("home.cta.titulo", "Concurso MRREE 2027 — Inicio del curso en agosto 2026");
+    var ctaTexto  = await Contenido.ObtenerAsync("home.cta.texto",  "Las inscripciones abren en junio de 2027. Los cupos son limitados.");
+}
+
+@* ───────────── HERO ───────────── *@
+<section class="pd-hero">
+    <div class="pd-wrap pd-hero__grid">
+        <div>
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>@heroEyebrow</div>
+            <h1 class="pd-display">
+                @heroT1<br/>
+                <em>@heroT2</em>
+            </h1>
+            <p class="pd-lead">@heroDesc</p>
+            <div class="pd-cta-row">
+                <a class="pd-btn pd-btn--blue" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+                <a class="pd-btn pd-btn--outline" asp-controller="Programa" asp-action="Index">El Programa →</a>
+            </div>
+        </div>
+        <div class="pd-hero__art" aria-hidden="true">
+            <img src="~/img/logo.png" alt="" />
+        </div>
+    </div>
+</section>
+
+@* ───────────── POR QUÉ ───────────── *@
+<section class="pd-section">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>@porqueEyebrow</div>
+            <h2 class="pd-h2">@porqueTitulo</h2>
+            <p class="pd-lead">@porqueIntro</p>
+        </div>
+        <div class="pd-grid pd-grid--3">
+            <article class="pd-card">
+                <h3>@c1t</h3>
+                <p>@c1d</p>
+            </article>
+            <article class="pd-card">
+                <h3>@c2t</h3>
+                <p>@c2d</p>
+            </article>
+            <article class="pd-card">
+                <h3>@c3t</h3>
+                <p>@c3d</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<hr class="pd-divider" />
+
+@* ───────────── 6 PRUEBAS ───────────── *@
+<section class="pd-section pd-section--gris">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Estructura del concurso</div>
+            <h2 class="pd-h2">Las seis pruebas</h2>
+            <p class="pd-lead">El Concurso MRREE 2027 consta de seis instancias. Las tres primeras son eliminatorias; las tres restantes suman al puntaje final.</p>
+        </div>
+        <div class="pd-grid pd-grid--3">
+            @{
+                var pruebas = new (string n, bool elim, string t, string d)[]
+                {
+                    ("I",   true,  "Múltiple opción",     "100 preguntas sobre las cuatro áreas temáticas. Eliminatoria; no acumula al puntaje final."),
+                    ("II",  true,  "Prueba de inglés",    "Evalúa las cuatro destrezas del idioma. Eliminatoria; mínimo requerido: 60 sobre 100."),
+                    ("III", true,  "Prueba escrita",      "Tres preguntas sorteadas, dos páginas por respuesta, tres horas. Vale hasta el 30%."),
+                    ("IV",  false, "Psicotécnica",        "Evalúa si el perfil conductual se ajusta a las exigencias de la función diplomática. Vale el 15%."),
+                    ("V",   false, "Prueba oral",         "Exposición de 15 minutos ante un tribunal. La instancia que define la brecha entre candidatos. 30%."),
+                    ("VI",  false, "Entrevista de aptitud","Entrevista con autoridades de Cancillería. Evalúa presentación, vocabulario y resolución. 17%.")
+                };
+            }
+            @foreach (var p in pruebas)
+            {
+                <article class="pd-card pd-card--num">
+                    <span class="pd-num @(p.elim ? "pd-num--rojo" : "")">@p.n</span>
+                    <h3>@p.t</h3>
+                    <p>@p.d</p>
+                    @if (p.elim)
+                    {
+                        <span class="pd-tag-elim">Eliminatoria</span>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<hr class="pd-divider" />
+
+@* ───────────── INSIGHTS ───────────── *@
+<section class="pd-section">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Más allá del temario</div>
+            <h2 class="pd-h2">El concurso evalúa más que el dominio de contenidos</h2>
+            <p class="pd-lead">Conocer el temario es condición necesaria; resulta insuficiente para obtener los resultados que exige una convocatoria de esta naturaleza.</p>
+        </div>
+        <div class="pd-grid pd-grid--2">
+            <div class="pd-insight">
+                <h3>La bibliografía oficial es orientativa</h3>
+                <p>El temario delimita las áreas pero no agota los textos que el tribunal puede utilizar. El conocimiento de coyuntura internacional forma parte de la evaluación.</p>
+            </div>
+            <div class="pd-insight">
+                <h3>La prueba oral define la brecha entre candidatos</h3>
+                <p>Responder con claridad y síntesis en 15 minutos sobre tres temas complejos requiere entrenamiento específico y sostenido.</p>
+            </div>
+            <div class="pd-insight">
+                <h3>La entrevista diplomática se prepara con simulación</h3>
+                <p>Evalúa ética, orientación al servicio público, trabajo bajo presión y capacidad de exposición ante autoridades.</p>
+            </div>
+            <div class="pd-insight">
+                <h3>La convocatoria concentra candidatos de alto nivel</h3>
+                <p>La tasa de aprobación es históricamente baja. Presentarse sin método claro es el factor que con mayor frecuencia explica los resultados insatisfactorios.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ───────────── BLOG (si hay posts) ───────────── *@
+@if (Model is not null && Model.Any())
+{
+    <hr class="pd-divider" />
+    <section class="pd-section pd-section--gris">
+        <div class="pd-wrap">
+            <div class="pd-section__head pd-section__head--center">
+                <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Blog</div>
+                <h2 class="pd-h2">Últimas publicaciones</h2>
+            </div>
+            <div class="pd-grid pd-grid--3">
+                @foreach (var post in Model)
+                {
+                    <a class="pd-blog-card" asp-controller="Blog" asp-action="Detalle" asp-route-slug="@post.Slug">
+                        @if (!string.IsNullOrEmpty(post.ImagenDestacada))
+                        {
+                            <div class="pd-blog-card__img"><img src="@post.ImagenDestacada" alt="@(post.ImagenAlt ?? post.Titulo)" /></div>
+                        }
+                        @if (post.Categoria is not null)
+                        {
+                            <span class="pd-tag" style="background:@(post.Categoria.Color ?? "#0C3F67"); color:#fff">@post.Categoria.Nombre</span>
+                        }
+                        <h3>@post.Titulo</h3>
+                        <p>@post.Resumen</p>
+                        <span class="pd-blog-card__more">Leer más →</span>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@* ───────────── CTA FINAL ───────────── *@
+<section class="pd-cta">
+    <div class="pd-wrap pd-cta__inner">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Lista de espera</div>
+        <h2 class="pd-h2 pd-h2--inverse">@ctaTitulo</h2>
+        <p class="pd-lead pd-lead--inverse">@ctaTexto</p>
+        <div class="pd-cta-row pd-cta-row--center">
+            <a class="pd-btn pd-btn--gold" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+            <a class="pd-btn pd-btn--ghost" asp-controller="Contacto" asp-action="Index">Contactar</a>
+        </div>
+    </div>
+</section>

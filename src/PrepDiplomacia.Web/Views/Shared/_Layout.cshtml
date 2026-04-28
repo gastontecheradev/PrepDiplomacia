@@ -1,0 +1,133 @@
+@inject IContenidoService Contenido
+@inject SignInManager<UsuarioAplicacion> SignInManager
+@inject UserManager<UsuarioAplicacion> UserManager
+
+@{
+    var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "prepdiplomaciauy@gmail.com");
+    var contactoIg    = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
+    var rutaActual    = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
+    string EsActivo(string segmento) => rutaActual.StartsWith(segmento) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(ViewData["Title"] ?? "Prep Diplomacia") · Prep Diplomacia</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Formación especializada para el Concurso de Ingreso al Servicio Exterior del Uruguay.")" />
+    <link rel="icon" href="~/img/favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;0,700;1,400;1,600;1,700&family=Lato:wght@@300;400;600&family=Montserrat:wght@@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Head", required: false)
+</head>
+<body>
+    <header class="pd-header">
+        <div class="pd-wrap pd-header__inner">
+            <a class="pd-logo" asp-controller="Home" asp-action="Index">
+                <img src="~/img/logo.png" alt="Prep Diplomacia" />
+                <span>Prep Diplomacia</span>
+            </a>
+
+            <nav class="pd-nav" aria-label="Principal">
+                <a class="pd-nav__link @EsActivo("/")" asp-controller="Home"     asp-action="Index">Inicio</a>
+                <a class="pd-nav__link @EsActivo("/programa")" asp-controller="Programa" asp-action="Index">El Programa</a>
+                <a class="pd-nav__link @EsActivo("/sobre")" asp-controller="Sobre"    asp-action="Index">Sobre Prep</a>
+                <a class="pd-nav__link @EsActivo("/blog")" asp-controller="Blog"     asp-action="Index">Blog</a>
+                <a class="pd-nav__link @EsActivo("/contacto")" asp-controller="Contacto" asp-action="Index">Contacto</a>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    var usuario = await UserManager.GetUserAsync(User);
+                    var esAdmin = usuario is not null && await UserManager.IsInRoleAsync(usuario, RolesSistema.Admin);
+                    var esAlumno = usuario is not null && await UserManager.IsInRoleAsync(usuario, RolesSistema.Alumno);
+
+                    @if (esAdmin)
+                    {
+                        <a class="pd-nav__link" href="/admin">Admin</a>
+                    }
+                    @if (esAlumno)
+                    {
+                        <a class="pd-nav__link" asp-controller="AreaAlumnos" asp-action="Index">Mi área</a>
+                    }
+                    <form asp-controller="Cuenta" asp-action="Logout" method="post" class="pd-nav__logout">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="pd-nav__link pd-nav__link--btn">Salir</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="pd-nav__link pd-nav__link--ghost" asp-controller="Cuenta" asp-action="Login">Ingresar</a>
+                }
+
+                <a class="pd-btn pd-btn--gold pd-nav__cta" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+            </nav>
+
+            <button class="pd-nav__toggle" aria-label="Menú" aria-expanded="false" type="button">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        @if (TempData["Mensaje"] is string msgTemp)
+        {
+            <div class="pd-toast pd-toast--ok">@msgTemp</div>
+        }
+        @if (TempData["MensajeOk"] is string msgOk)
+        {
+            <div class="pd-toast pd-toast--ok">@msgOk</div>
+        }
+        @if (TempData["NewsletterOk"] is string nlOk)
+        {
+            <div class="pd-toast pd-toast--ok">@nlOk</div>
+        }
+        @if (TempData["NewsletterError"] is string nlErr)
+        {
+            <div class="pd-toast pd-toast--err">@nlErr</div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="pd-footer">
+        <div class="pd-wrap pd-footer__grid">
+            <div>
+                <img src="~/img/logo.png" class="pd-footer__logo" alt="Prep Diplomacia" />
+                <p>Formación especializada para el Concurso de Ingreso al Servicio Exterior del Uruguay.</p>
+            </div>
+            <div>
+                <h6>Navegación</h6>
+                <a asp-controller="Home" asp-action="Index">Inicio</a>
+                <a asp-controller="Programa" asp-action="Index">El Programa</a>
+                <a asp-controller="Sobre" asp-action="Index">Sobre Prep</a>
+                <a asp-controller="Blog" asp-action="Index">Blog</a>
+                <a asp-controller="Inscripcion" asp-action="Index">Inscripción</a>
+            </div>
+            <div>
+                <h6>Contacto</h6>
+                <a href="mailto:@contactoEmail">@contactoEmail</a>
+                <a href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@contactoIg</a>
+                <a asp-controller="Legal" asp-action="Terminos">Términos y Condiciones</a>
+                <a asp-controller="Legal" asp-action="Privacidad">Política de Privacidad</a>
+            </div>
+            <div>
+                <h6>Newsletter</h6>
+                <p class="pd-footer__nl-intro">Recibí novedades del concurso y del programa.</p>
+                <form id="pd-nl-form" class="pd-footer__nl" asp-controller="Newsletter" asp-action="Suscribir" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Origen" value="footer" />
+                    <input type="email" name="Email" placeholder="tu@@correo.com" required />
+                    <button type="submit">Suscribirme</button>
+                </form>
+                <small id="pd-nl-msg"></small>
+            </div>
+        </div>
+        <div class="pd-footer__bottom">
+            <span>© @DateTime.Now.Year Prep Diplomacia. Todos los derechos reservados.</span>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

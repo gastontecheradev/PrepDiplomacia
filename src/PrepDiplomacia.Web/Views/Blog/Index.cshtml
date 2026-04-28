@@ -1,0 +1,90 @@
+@model BlogPaginadoViewModel
+@{ ViewData["Title"] = "Blog"; }
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Blog</div>
+        <h1 class="pd-h1 pd-h1--inverse">Artículos y recursos</h1>
+        <p class="pd-lead pd-lead--inverse">Notas sobre el concurso, coyuntura internacional y carrera diplomática.</p>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap pd-grid pd-grid--side" style="align-items: start;">
+        <div>
+            <form method="get" class="pd-search">
+                <input type="search" name="q" placeholder="Buscar…" value="@Model.Busqueda" />
+                @if (Model.CategoriaId.HasValue) { <input type="hidden" name="categoriaId" value="@Model.CategoriaId" /> }
+                @if (Model.TagId.HasValue)        { <input type="hidden" name="tagId" value="@Model.TagId" /> }
+                <button type="submit">Buscar</button>
+            </form>
+
+            @if (!Model.Posts.Any())
+            {
+                <div class="pd-alert pd-alert--info" style="margin-top: 24px;">
+                    <p>No hay publicaciones que coincidan con tu búsqueda.</p>
+                </div>
+            }
+            else
+            {
+                <div class="pd-grid pd-grid--2" style="margin-top: 24px;">
+                    @foreach (var post in Model.Posts)
+                    {
+                        <a class="pd-blog-card" asp-controller="Blog" asp-action="Detalle" asp-route-slug="@post.Slug">
+                            @if (!string.IsNullOrEmpty(post.ImagenDestacada))
+                            {
+                                <div class="pd-blog-card__img"><img src="@post.ImagenDestacada" alt="@(post.ImagenAlt ?? post.Titulo)" /></div>
+                            }
+                            @if (post.Categoria is not null)
+                            {
+                                <span class="pd-tag" style="background:@(post.Categoria.Color ?? "#0C3F67"); color:#fff">@post.Categoria.Nombre</span>
+                            }
+                            <h3>@post.Titulo</h3>
+                            <p>@post.Resumen</p>
+                            <small class="pd-blog-card__meta">@post.FechaPublicacion?.ToString("dd MMM yyyy")</small>
+                        </a>
+                    }
+                </div>
+
+                @if (Model.TotalPaginas > 1)
+                {
+                    <nav class="pd-pager">
+                        @for (int p = 1; p <= Model.TotalPaginas; p++)
+                        {
+                            <a class="pd-pager__link @(p == Model.Pagina ? "pd-pager__link--active" : "")"
+                               asp-action="Index" asp-route-pagina="@p"
+                               asp-route-categoriaId="@Model.CategoriaId"
+                               asp-route-tagId="@Model.TagId"
+                               asp-route-q="@Model.Busqueda">@p</a>
+                        }
+                    </nav>
+                }
+            }
+        </div>
+
+        <aside class="pd-aside">
+            <div class="pd-card">
+                <h3>Categorías</h3>
+                <ul class="pd-list pd-list--clean">
+                    <li><a asp-action="Index">Todas</a></li>
+                    @foreach (var cat in Model.Categorias)
+                    {
+                        <li><a asp-action="Index" asp-route-categoriaId="@cat.Id">@cat.Nombre</a></li>
+                    }
+                </ul>
+            </div>
+            @if (Model.Tags.Any())
+            {
+                <div class="pd-card">
+                    <h3>Etiquetas</h3>
+                    <div class="pd-tagcloud">
+                        @foreach (var t in Model.Tags)
+                        {
+                            <a class="pd-tag pd-tag--small" asp-action="Index" asp-route-tagId="@t.Id">#@t.Nombre</a>
+                        }
+                    </div>
+                </div>
+            }
+        </aside>
+    </div>
+</section>

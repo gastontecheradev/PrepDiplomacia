@@ -1,0 +1,33 @@
+@model PrepDiplomacia.Infrastructure.Identity.UsuarioAplicacion?
+@{ ViewData["Title"] = "Área de alumnos"; }
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Área privada</div>
+        <h1 class="pd-h1 pd-h1--inverse">Hola @(Model?.NombreCompleto ?? Model?.Email)</h1>
+        <p class="pd-lead pd-lead--inverse">Acceso al material y clases del programa.</p>
+    </div>
+</section>
+
+<section class="pd-section">
+    <div class="pd-wrap">
+        <div class="pd-grid pd-grid--3">
+            <div class="pd-card">
+                <h3>Próximas clases</h3>
+                <p>El calendario académico se publicará en agosto de 2026, una vez confirmado el grupo del programa 2027.</p>
+            </div>
+            <div class="pd-card">
+                <h3>Materiales</h3>
+                <p>Los materiales se irán publicando aquí a medida que avance el programa.</p>
+            </div>
+            <div class="pd-card">
+                <h3>Mi cuenta</h3>
+                <p><a class="pd-link" asp-controller="Cuenta" asp-action="CambiarPassword">Cambiar mi contraseña</a></p>
+                <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin-top: 12px;">
+                    @Html.AntiForgeryToken()
+                    <button class="pd-btn pd-btn--outline" type="submit">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,119 @@
+@inject IContenidoService Contenido
+@{
+    ViewData["Title"] = "El Programa";
+    var intro = await Contenido.ObtenerAsync("programa.intro",
+        "Seis meses de trabajo académico con cursado sincrónico, materiales propios y seguimiento individual.");
+}
+
+<section class="pd-page-hero">
+    <div class="pd-wrap">
+        <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>El Programa</div>
+        <h1 class="pd-h1 pd-h1--inverse">Formación integral para el Concurso MRREE 2027</h1>
+        <p class="pd-lead pd-lead--inverse">@intro</p>
+    </div>
+</section>
+
+@{
+    var bloques = new[]
+    {
+        new {
+            Tag = "Agosto 2026",
+            Titulo = "Ciclo introductorio",
+            Intro = "El programa abre con un ciclo dedicado a comprender el concurso en profundidad antes de abordar el contenido temático.",
+            Cards = new[]
+            {
+                ("El Servicio Exterior del Uruguay","Historia, estructura, función e inserción institucional."),
+                ("La carrera diplomática","En qué consiste el ejercicio en la práctica de la diplomacia y qué competencias valora el MRREE."),
+                ("El perfil del candidato","Qué evalúa el tribunal más allá del conocimiento académico."),
+                ("Estructura del concurso","Análisis detallado de cada instancia, criterios de evaluación y metodología.")
+            },
+            BgGris = false, Cols = 2
+        },
+        new {
+            Tag = "Septiembre — Diciembre 2026",
+            Titulo = "Áreas temáticas",
+            Intro = "Cada área temática se trabaja a través de sus temas oficiales con clases de revisión y consolidación.",
+            Cards = new[]
+            {
+                ("Derecho Internacional","DIP y DIPriv. Convenios de Viena, Carta de la ONU, derechos humanos, normativa constitucional uruguaya relevante."),
+                ("Política Internacional","Historia y presente de la política exterior uruguaya, geopolítica, multilateralismo y relaciones regionales."),
+                ("Economía y Comercio Internacional","Comercio internacional, política comercial, OMC, integración regional, MERCOSUR y acuerdos comerciales."),
+                ("Historia y Cultura del Uruguay","Formación del Estado-nación, procesos políticos y culturales. Se evalúa únicamente en la prueba de múltiple opción.")
+            },
+            BgGris = true, Cols = 2
+        },
+        new {
+            Tag = "Enero — Febrero 2027",
+            Titulo = "Talleres de aplicación",
+            Intro = "El programa dedica su etapa final a preparar cada prueba del concurso en condiciones que replican las reales.",
+            Cards = new[]
+            {
+                ("Múltiple opción","Técnica de respuesta, gestión del tiempo y simulacros de 100 preguntas."),
+                ("Prueba escrita","Argumentación académica y redacción bajo tiempo. Corrección individualizada."),
+                ("Inglés","Preparación orientada al nivel B2 exigido en las cuatro destrezas."),
+                ("Prueba oral","Exposición de 15 minutos con devolución sobre contenido, estructura y aplomo."),
+                ("Psicotécnica","Familiarización con los ejercicios y trabajo sobre competencias conductuales."),
+                ("Aptitud diplomática","Simulación de entrevista con autoridades. Presentación personal y vocabulario.")
+            },
+            BgGris = false, Cols = 3
+        }
+    };
+}
+
+@foreach (var b in bloques)
+{
+    <section class="pd-section @(b.BgGris ? "pd-section--gris" : "")">
+        <div class="pd-wrap">
+            <div class="pd-section__head" style="max-width: 720px;">
+                <span class="pd-tag pd-tag--dark">@b.Tag</span>
+                <h2 class="pd-h2" style="margin-top: 12px;">@b.Titulo</h2>
+                <p class="pd-lead">@b.Intro</p>
+            </div>
+            <div class="pd-grid pd-grid--@(b.Cols)">
+                @foreach (var c in b.Cards)
+                {
+                    <article class="pd-card">
+                        <h3>@c.Item1</h3>
+                        <p>@c.Item2</p>
+                    </article>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="pd-section pd-section--gris">
+    <div class="pd-wrap">
+        <div class="pd-section__head pd-section__head--center">
+            <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Cómo trabajamos</div>
+            <h2 class="pd-h2">Metodología de trabajo</h2>
+        </div>
+        <div class="pd-grid pd-grid--3">
+            <div class="pd-method">
+                <span class="pd-method__num">01</span>
+                <h3>Estudio autónomo previo</h3>
+                <p>El estudiante trabaja los materiales antes de cada clase. Las clases no repiten lo que puede leerse; lo profundizan y ejercitan.</p>
+            </div>
+            <div class="pd-method">
+                <span class="pd-method__num">02</span>
+                <h3>Clases sincrónicas en vivo</h3>
+                <p>Sesiones por videoconferencia dedicadas a resolver dudas, analizar casos y ejercitar.</p>
+            </div>
+            <div class="pd-method">
+                <span class="pd-method__num">03</span>
+                <h3>Simulacros con devolución</h3>
+                <p>Los simulacros reproducen las condiciones reales de cada prueba y son corregidos con devolución individual.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pd-cta">
+    <div class="pd-wrap pd-cta__inner">
+        <h2 class="pd-h2 pd-h2--inverse">Concurso MRREE 2027</h2>
+        <p class="pd-lead pd-lead--inverse">Los cupos son limitados. Reservá tu lugar en el programa.</p>
+        <div class="pd-cta-row pd-cta-row--center">
+            <a class="pd-btn pd-btn--gold" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+        </div>
+    </div>
+</section>

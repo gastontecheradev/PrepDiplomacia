@@ -1,0 +1,105 @@
+@model PostBlog
+@{
+    ViewData["Title"] = Model.Titulo;
+    ViewData["Description"] = Model.MetaDescripcion ?? Model.Resumen;
+}
+
+<section class="pd-section">
+    <article class="pd-wrap pd-post" style="max-width: 760px;">
+        <header class="pd-post__head">
+            @if (Model.Categoria is not null)
+            {
+                <span class="pd-tag" style="background:@(Model.Categoria.Color ?? "#0C3F67"); color:#fff;">@Model.Categoria.Nombre</span>
+            }
+            <h1 class="pd-h1" style="color: var(--azul); margin-top: 12px;">@Model.Titulo</h1>
+            <small class="pd-post__meta">
+                @Model.FechaPublicacion?.ToString("dd MMMM yyyy") ·
+                @Model.Vistas vistas
+            </small>
+        </header>
+
+        @if (!string.IsNullOrEmpty(Model.ImagenDestacada))
+        {
+            <figure class="pd-post__hero">
+                <img src="@Model.ImagenDestacada" alt="@(Model.ImagenAlt ?? Model.Titulo)" />
+            </figure>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.YouTubeVideoId))
+        {
+            <div class="pd-post__video">
+                <iframe src="https://www.youtube.com/embed/@Model.YouTubeVideoId"
+                        title="Video" frameborder="0" allowfullscreen></iframe>
+            </div>
+        }
+
+        <div class="pd-prose">
+            @Html.Raw(Model.Contenido)
+        </div>
+
+        @if (Model.PostTags.Any())
+        {
+            <div class="pd-post__tags">
+                @foreach (var pt in Model.PostTags)
+                {
+                    <a class="pd-tag pd-tag--small" asp-controller="Blog" asp-action="Index" asp-route-tagId="@pt.TagBlog.Id">#@pt.TagBlog.Nombre</a>
+                }
+            </div>
+        }
+    </article>
+</section>
+
+@if (Model.ComentariosHabilitados)
+{
+    <section class="pd-section pd-section--gris">
+        <div class="pd-wrap" style="max-width: 760px;">
+            <h2 class="pd-h2">Comentarios</h2>
+
+            @if (TempData["ComentarioOk"] is string okC)
+            {
+                <div class="pd-alert pd-alert--ok">@okC</div>
+            }
+
+            @if (Model.Comentarios.Any())
+            {
+                @foreach (var c in Model.Comentarios.Where(x => x.Aprobado).OrderBy(x => x.FechaCreacion))
+                {
+                    <div class="pd-comment">
+                        <header>
+                            <strong>@c.NombreAutor</strong>
+                            <small>@c.FechaCreacion.ToString("dd MMM yyyy")</small>
+                        </header>
+                        <p>@c.Contenido</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="pd-muted">Sé la primera persona en comentar.</p>
+            }
+
+            <form asp-controller="Blog" asp-action="Comentar" method="post" class="pd-form" style="margin-top: 32px;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="PostBlogId" value="@Model.Id" />
+                <h3 class="pd-h2 pd-h2--small">Dejá tu comentario</h3>
+                <p class="pd-form__hint">Tu comentario será revisado antes de publicarse.</p>
+
+                <div class="pd-form__grid">
+                    <div class="pd-form__field">
+                        <label>Nombre</label>
+                        <input name="NombreAutor" required maxlength="120" />
+                    </div>
+                    <div class="pd-form__field">
+                        <label>Correo (no se publica)</label>
+                        <input name="EmailAutor" type="email" required maxlength="180" />
+                    </div>
+                    <div class="pd-form__field pd-form__field--full">
+                        <label>Comentario</label>
+                        <textarea name="Contenido" rows="4" required maxlength="2000"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="pd-btn pd-btn--blue">Enviar comentario</button>
+            </form>
+        </div>
+    </section>
+}

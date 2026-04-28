@@ -1,0 +1,58 @@
+@model DashboardViewModel
+@{ ViewData["Title"] = "Dashboard"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Dashboard</h1>
+        <p>Resumen del sistema y actividad reciente.</p>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--blue" href="/admin/blog/nuevo">+ Nueva publicación</a>
+    </div>
+</header>
+
+<div class="pd-stats">
+    <div class="pd-stat"><span>@Model.TotalPosts</span><small>Publicaciones</small></div>
+    <div class="pd-stat"><span>@Model.PostsBorrador</span><small>En borrador</small></div>
+    <div class="pd-stat"><span>@Model.TotalSuscriptores</span><small>Suscriptores newsletter</small></div>
+    <div class="pd-stat"><span>@Model.TotalInscripciones</span><small>Inscripciones</small></div>
+    <div class="pd-stat"><span>@Model.InscripcionesActivas</span><small>Inscripciones activas</small></div>
+    <div class="pd-stat"><span>@Model.MensajesNoLeidos</span><small>Mensajes no leídos</small></div>
+    <div class="pd-stat pd-stat--alert"><span>@Model.ComentariosPendientes</span><small>Comentarios a moderar</small></div>
+</div>
+
+<div class="pd-grid pd-grid--2" style="margin-top: 32px;">
+    <div class="pd-card">
+        <h3>Últimas publicaciones</h3>
+        @if (!Model.UltimosPosts.Any()) { <p class="pd-muted">Aún no hay publicaciones.</p> }
+        else
+        {
+            <ul class="pd-list pd-list--clean">
+                @foreach (var p in Model.UltimosPosts)
+                {
+                    <li>
+                        <a href="/admin/blog/editar/@p.Id">@p.Titulo</a>
+                        <small class="pd-muted">@p.Estado · @p.FechaCreacion.ToString("dd MMM yyyy")</small>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="pd-card">
+        <h3>Últimos mensajes</h3>
+        @if (!Model.UltimosMensajes.Any()) { <p class="pd-muted">Sin mensajes recientes.</p> }
+        else
+        {
+            <ul class="pd-list pd-list--clean">
+                @foreach (var m in Model.UltimosMensajes)
+                {
+                    <li>
+                        <a href="/admin/mensajes/@m.Id">@m.Nombre — @m.Asunto</a>
+                        <small class="pd-muted">@m.FechaCreacion.ToString("dd MMM HH:mm")</small>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

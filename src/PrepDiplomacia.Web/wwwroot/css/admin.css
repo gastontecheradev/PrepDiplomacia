@@ -1,0 +1,231 @@
+/* ============================================================
+   Prep Diplomacia — Admin
+   ============================================================ */
+
+body.pd-admin {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    background: var(--gris);
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.pd-admin__sidebar {
+    background: var(--azul-prof);
+    color: rgba(255,255,255,0.75);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 3px solid var(--dorado);
+}
+
+.pd-admin__brand {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 1rem;
+}
+.pd-admin__brand img { height: 36px; filter: brightness(0) invert(1); }
+.pd-admin__brand span {
+    font-family: var(--f-ui);
+    font-weight: 700;
+    color: var(--dorado);
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.pd-admin__nav { display: flex; flex-direction: column; flex: 1; }
+.pd-admin__nav a {
+    color: rgba(255,255,255,0.7);
+    padding: 0.7rem 1.5rem;
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+}
+.pd-admin__nav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+}
+.pd-admin__nav a.active {
+    color: var(--dorado);
+    background: rgba(243,189,45,0.08);
+    border-left-color: var(--dorado);
+}
+
+.pd-admin__user {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.85rem;
+}
+.pd-admin__user > div { color: #fff; font-weight: 600; margin-bottom: 4px; font-family: var(--f-ui); }
+.pd-admin__user small,
+.pd-admin__user a { color: rgba(255,255,255,0.55); display: block; margin-bottom: 4px; }
+.pd-admin__user a:hover { color: var(--dorado); }
+
+/* ── Main ────────────────────────────────────────────────── */
+.pd-admin__main { padding: 2.5rem; }
+
+.pd-admin__head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;
+}
+.pd-admin__head h1 {
+    font-family: var(--f-display);
+    color: var(--azul);
+    font-size: 1.8rem;
+    margin: 0 0 0.3rem 0;
+}
+.pd-admin__head p { color: var(--suave); font-size: 0.95rem; margin: 0; }
+.pd-admin__actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+/* ── Stats ───────────────────────────────────────────────── */
+.pd-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+.pd-stat {
+    background: #fff;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--borde);
+    border-bottom: 3px solid var(--dorado);
+    display: flex; flex-direction: column; gap: 6px;
+}
+.pd-stat span {
+    font-family: var(--f-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--azul);
+    line-height: 1;
+}
+.pd-stat small {
+    font-family: var(--f-ui);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--suave);
+}
+.pd-stat--alert  { border-bottom-color: var(--rojo); }
+.pd-stat--alert span { color: var(--rojo); }
+
+/* ── Tablas ──────────────────────────────────────────────── */
+.pd-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--borde);
+}
+.pd-table thead { background: var(--azul); color: #fff; }
+.pd-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-family: var(--f-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.pd-table td {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--borde);
+    vertical-align: top;
+    font-size: 0.92rem;
+}
+.pd-table tbody tr:hover { background: var(--gris); }
+.pd-table small { color: var(--suave); display: block; font-size: 0.75rem; }
+.pd-table .pd-link, .pd-table form { margin-right: 8px; }
+.pd-table__row--bold td { font-weight: 600; color: var(--azul); }
+.pd-table__row--off  td { color: var(--suave); }
+.pd-table--mini th, .pd-table--mini td { padding: 0.5rem 0.7rem; font-size: 0.85rem; }
+
+/* ── Pills (estados) ─────────────────────────────────────── */
+.pd-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    font-family: var(--f-ui);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--gris-alt);
+    color: var(--azul);
+    border: 1px solid var(--borde);
+}
+.pd-pill--publicado, .pd-pill--activa, .pd-pill--ok, .pd-pill--completado { background: #d1fae5; border-color: #10b981; color: #065f46; }
+.pd-pill--borrador, .pd-pill--pending, .pd-pill--pagopendiente, .pd-pill--pendiente { background: #fef3c7; border-color: var(--dorado); color: #78350f; }
+.pd-pill--archivado, .pd-pill--off, .pd-pill--cancelada { background: #f3f4f6; border-color: #9ca3af; color: #374151; }
+.pd-pill--fallido { background: #fee2e2; border-color: var(--rojo); color: #7f1d1d; }
+.pd-pill--encuotas { background: #dbeafe; border-color: #3b82f6; color: #1e3a8a; }
+
+/* ── Empty / Comentario moderación ───────────────────────── */
+.pd-empty {
+    background: #fff;
+    border: 2px dashed var(--borde);
+    padding: 3rem;
+    text-align: center;
+    color: var(--suave);
+}
+
+.pd-comment-mod {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-left: 3px solid var(--dorado);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+}
+.pd-comment-mod__head {
+    display: flex; gap: 12px; align-items: baseline;
+    flex-wrap: wrap; margin-bottom: 0.5rem;
+}
+.pd-comment-mod__head strong { color: var(--azul); }
+.pd-comment-mod__head small  { color: var(--suave); font-size: 0.78rem; }
+.pd-comment-mod__actions { margin-top: 0.8rem; display: flex; gap: 0.5rem; }
+
+/* ── Form de bloque (contenido editable) ─────────────────── */
+.pd-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--borde);
+}
+.pd-bloque:last-child { border-bottom: 0; }
+.pd-bloque button { align-self: flex-start; }
+
+/* ── Checks (tags) ───────────────────────────────────────── */
+.pd-checks { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.pd-check  {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--gris); padding: 4px 10px;
+    border: 1px solid var(--borde);
+    font-size: 0.85rem; cursor: pointer;
+}
+.pd-check input[type=checkbox] { margin: 0; }
+
+/* ── Grid edición admin ──────────────────────────────────── */
+.pd-grid--admin-edit {
+    grid-template-columns: 1fr 320px;
+    align-items: start;
+}
+@media (max-width: 1100px) {
+    .pd-grid--admin-edit { grid-template-columns: 1fr; }
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+    body.pd-admin { grid-template-columns: 1fr; }
+    .pd-admin__sidebar { position: static; height: auto; flex-direction: column; }
+    .pd-admin__nav { flex-direction: row; flex-wrap: wrap; padding: 0 1rem; }
+    .pd-admin__nav a { padding: 0.6rem 1rem; border-left: 0; border-bottom: 3px solid transparent; }
+    .pd-admin__nav a.active { border-left: 0; border-bottom-color: var(--dorado); }
+    .pd-admin__main { padding: 1.5rem; }
+}

@@ -1,0 +1,58 @@
+@model Inscripcion
+@{ ViewData["Title"] = $"Inscripción #{Model.Id}"; }
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Inscripción #@Model.Id</h1>
+        <p>@Model.NombreCompleto</p>
+    </div>
+    <div class="pd-admin__actions">
+        <a class="pd-btn pd-btn--outline" href="/admin/inscripciones">← Volver</a>
+    </div>
+</header>
+
+<div class="pd-grid pd-grid--2">
+    <div class="pd-card">
+        <h3>Datos del candidato</h3>
+        <ul class="pd-list">
+            <li><strong>Nombre:</strong> @Model.NombreCompleto</li>
+            <li><strong>Email:</strong> @Model.Email</li>
+            <li><strong>Teléfono:</strong> @(Model.Telefono ?? "—")</li>
+            <li><strong>Formación:</strong> @(Model.FormacionAcademica ?? "—")</li>
+            <li><strong>Plan:</strong> @Model.PlanCurso?.Nombre</li>
+            <li><strong>Modalidad:</strong> @Model.ModalidadElegida</li>
+            <li><strong>Estado:</strong> <span class="pd-pill pd-pill--@(Model.Estado.ToString().ToLower())">@Model.Estado</span></li>
+        </ul>
+        @if (!string.IsNullOrEmpty(Model.ConsultaAdicional))
+        {
+            <h4 style="margin-top: 16px;">Consulta</h4>
+            <p>@Model.ConsultaAdicional</p>
+        }
+    </div>
+
+    <div class="pd-card">
+        <h3>Pagos</h3>
+        @if (!Model.Pagos.Any())
+        {
+            <p class="pd-muted">Aún no se registraron pagos.</p>
+        }
+        else
+        {
+            <table class="pd-table pd-table--mini">
+                <thead><tr><th>Fecha</th><th>Monto</th><th>Estado</th><th>Cuota</th><th>Stripe</th></tr></thead>
+                <tbody>
+                @foreach (var p in Model.Pagos.OrderBy(x => x.FechaCreacion))
+                {
+                    <tr>
+                        <td>@(p.FechaPago?.ToString("dd MMM yyyy") ?? "—")</td>
+                        <td>@p.Monto.ToString("N2") @p.Moneda.ToUpper()</td>
+                        <td><span class="pd-pill pd-pill--@(p.Estado.ToString().ToLower())">@p.Estado</span></td>
+                        <td>@(p.NumeroCuota.HasValue ? $"{p.NumeroCuota}/{p.TotalCuotas}" : "—")</td>
+                        <td><small>@(p.StripeSessionId ?? p.StripePaymentIntentId)</small></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
