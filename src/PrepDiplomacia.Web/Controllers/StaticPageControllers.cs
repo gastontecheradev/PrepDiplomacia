@@ -5,14 +5,12 @@ namespace PrepDiplomacia.Web.Controllers;
 public class SobreController : Controller
 {
     [Route("sobre-prep")]
-    [Route("[controller]")]
     public IActionResult Index() => View();
 }
 
 public class ProgramaController : Controller
 {
     [Route("programa")]
-    [Route("[controller]")]
     public IActionResult Index() => View();
 }
 

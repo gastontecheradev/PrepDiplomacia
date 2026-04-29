@@ -23,4 +23,8 @@
     <ProjectReference Include="..\PrepDiplomacia.Infrastructure\PrepDiplomacia.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
 </Project>
