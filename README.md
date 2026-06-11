@@ -30,7 +30,7 @@ ASP.NET Core 8 MVC · ASP.NET Identity · Entity Framework Core (SQLite) · Stri
 
 ## Estructura
 
-Tres capas siguiendo Clean Architecture:
+Tres capas siguiendo Clean Architecture:|
 
 - `PrepDiplomacia.Domain` — entidades y reglas de negocio.
 - `PrepDiplomacia.Infrastructure` — EF Core, Identity, Stripe, MailKit, Mailchimp.

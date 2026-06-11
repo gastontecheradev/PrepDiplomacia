@@ -19,6 +19,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@@0,400;0,600;0,700;1,400;1,600;1,700&family=Lato:wght@@300;400;600&family=Montserrat:wght@@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Head", required: false)
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="PrepDiplomacia" />
+    <meta property="og:description" content="Prep Diplomacia" />
+    <meta property="og:image" content="https://prepdiplomacia.azurewebsites.net/images/og-image.jpg" />
+    <meta property="og:type" content="website" />
 </head>
 <body>
     <header class="pd-header">
@@ -92,7 +98,8 @@
     <footer class="pd-footer">
         <div class="pd-wrap pd-footer__grid">
             <div>
-                <img src="~/img/logo.png" class="pd-footer__logo" alt="Prep Diplomacia" />
+                @* <img src="~/img/logo.png" class="pd-footer__logo" alt="Prep Diplomacia" /> *@
+                <h6>Prep Diplomacia</h6>
                 <p>Formación especializada para el Concurso de Ingreso al Servicio Exterior del Uruguay.</p>
             </div>
             <div>

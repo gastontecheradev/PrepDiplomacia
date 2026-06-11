@@ -147,7 +147,7 @@ public static class SeedInicial
                     Valor = "Concurso MRREE 2027 — Inicio del curso en agosto 2026" },
             new() { Clave = "home.cta.texto", Etiqueta = "Texto CTA final del home",
                     Seccion = "Inicio", Tipo = "parrafo", Orden = 31,
-                    Valor = "Las inscripciones abren en junio de 2027. Los cupos son limitados. Dejá tus datos para recibir toda la información del programa antes del lanzamiento." },
+                    Valor = " Las pre inscripciones abren en junio de 2026. Los cupos son limitados. Dejanos tus datos para recibir toda la información del programa antes del lanzamiento." },
 
             // ── SOBRE ──
             new() { Clave = "sobre.intro", Etiqueta = "Intro Sobre Prep",

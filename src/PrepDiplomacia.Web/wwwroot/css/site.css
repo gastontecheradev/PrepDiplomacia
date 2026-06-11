@@ -118,6 +118,7 @@ button { font-family: inherit; cursor: pointer; }
     line-height: 1.8;
     color: var(--suave);
     text-align: justify;
+    margin-top: 2rem;
 }
 .pd-lead--inverse { color: rgba(255,255,255,0.85); text-align: left; }
 
@@ -165,7 +166,7 @@ button { font-family: inherit; cursor: pointer; }
 .pd-btn--danger  { color: var(--rojo); border-color: var(--rojo); }
 .pd-btn--danger:hover { background: var(--rojo); color: #fff; }
 
-.pd-cta-row { display: flex; gap: 0.875rem; flex-wrap: wrap; align-items: center; }
+.pd-cta-row { display: flex; gap: 0.875rem; flex-wrap: wrap; align-items: center; margin-top: 2rem;}
 .pd-cta-row--center { justify-content: center; }
 
 /* ── Tags ────────────────────────────────────────────────── */
