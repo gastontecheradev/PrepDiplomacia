@@ -51,23 +51,33 @@ public static class SeedInicial
     }
 
     private static async Task SeedAdminAsync(
-        UserManager<UsuarioAplicacion> userManager,
-        IConfiguration config,
-        ILogger logger)
+    UserManager<UsuarioAplicacion> userManager,
+    IConfiguration config,
+    ILogger logger)
     {
-        // Las credenciales del admin vienen de configuración (user-secrets en dev,
-        // variables de entorno en producción). NUNCA hardcodear.
-        var email          = config["Admin:Email"]    ?? "prepdiplomaciauy@gmail.com";
-        var password       = config["Admin:Password"] ?? "CambiarEnPrimerLogin#2027";
+        var email = config["Admin:Email"] ?? "prepdiplomaciauy@gmail.com";
         var nombreCompleto = config["Admin:NombreCompleto"] ?? "Carolina Techera";
+        var password = config["Admin:Password"];
 
+        // Si ya existe el admin, no hacemos nada (idempotente).
         var existente = await userManager.FindByEmailAsync(email);
         if (existente is not null) return;
 
+        // La contraseña DEBE venir de configuración (user-secrets en dev,
+        // variables de entorno / App Service settings en producción).
+        // Si no está configurada, NO creamos un admin con contraseña por defecto.
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            logger.LogError(
+                "No se creó el usuario admin: falta 'Admin:Password' en la configuración. " +
+                "Cargala con user-secrets (dev) o variables de entorno (producción).");
+            return;
+        }
+
         var admin = new UsuarioAplicacion
         {
-            UserName       = email,
-            Email          = email,
+            UserName = email,
+            Email = email,
             EmailConfirmed = true,
             NombreCompleto = nombreCompleto,
             TieneAccesoArea = true
