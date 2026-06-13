@@ -162,16 +162,16 @@ public static class SeedInicial
             // ── SOBRE ──
             new() { Clave = "sobre.intro", Etiqueta = "Intro Sobre Prep",
                     Seccion = "Sobre Prep", Tipo = "parrafo", Orden = 1,
-                    Valor = "Internacionalista, consultora y ex diplomática del Servicio Exterior del Uruguay y ex Cónsul en París, es la fundadora y coordinadora académica de Prep Diplomacia." },
+                    Valor = "Internacionalista, consultora, ex diplomática del Servicio Exterior del Uruguay y ex Cónsul en París, es la fundadora y coordinadora académica de Prep Diplomacia." },
             new() { Clave = "sobre.trayectoria", Etiqueta = "Trayectoria",
                     Seccion = "Sobre Prep", Tipo = "html", Orden = 2,
-                    Valor = "<p>Ejercí como funcionaria del Servicio Exterior de la República y cumplí funciones consulares en París, lo que me permitió conocer de primera mano el funcionamiento real de la diplomacia uruguaya, sus exigencias operativas y el perfil que la institución busca en quienes ingresan a la carrera.</p><p>A esa experiencia en misión se suma una trayectoria en investigación académica y consultoría especializada en relaciones internacionales y diplomacia.</p>" },
+                    Valor = "<p> Carolina fue diplomática, funcionaria del Servicio Exterior de la República Oriental del Uruguay, donde cumplió funciones diplomáticas y consulares en Francia, con concurrencia en Mónaco, Argelia y Senegal.</p><p>Esa experiencia le permitió conocer de primera mano el funcionamiento real de la diplomacia uruguaya, sus exigencias operativas y el perfil que la institución busca en quienes ingresan a la carrera. A esa experiencia en misión se suma una trayectoria en investigación académica y consultoría especializada en relaciones internacionales y diplomacia.</p>" },
             new() { Clave = "sobre.por_que_existe", Etiqueta = "Por qué existe",
                     Seccion = "Sobre Prep", Tipo = "html", Orden = 3,
-                    Valor = "<p>El Concurso de Ingreso al Servicio Exterior es uno de los procesos de selección más exigentes del Estado uruguayo. Su dificultad no radica únicamente en la amplitud del temario, sino en la diversidad de competencias que evalúa.</p>" },
+                    Valor = "<p>El Concurso de Ingreso al Servicio Exterior es uno de los procesos de selección más exigentes del Estado uruguayo. Su dificultad no radica únicamente en la amplitud del temario, sino en la diversidad de competencias que evalúa, la cantidad de pruebas que lo componen y la poca información de acceso público sobre las ediciones anterioree del concurso.</p>" },
             new() { Clave = "sobre.enfoque", Etiqueta = "Enfoque pedagógico",
                     Seccion = "Sobre Prep", Tipo = "html", Orden = 4,
-                    Valor = "<p>El programa trabaja con bibliografía actualizada y conocimiento de coyuntura internacional, a través del modelo de aula invertida.</p>" },
+                    Valor = "<p>El programa trabaja con bibliografía actualizada y conocimiento de coyuntura internacional, a través del modelo de aula invertida. En paralelo, se actualiza y analiza información de actualidad diariamente en grupos de WhatsApp dedicado a ello. Estar informados de la actualidad geopolítica, y poder analizarla con base teórica y objetividad diplomática, es igual de importante que el estudio de las áreas temáticas.</p>" },
 
             // ── PROGRAMA ──
             new() { Clave = "programa.intro", Etiqueta = "Intro Programa",
