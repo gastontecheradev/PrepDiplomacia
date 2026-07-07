@@ -7,22 +7,22 @@
     <div class="pd-wrap">
         <div class="pd-eyebrow pd-eyebrow--inverse"><span class="pd-eyebrow__line"></span>Edición 2027</div>
         <h1 class="pd-h1 pd-h1--inverse">Inscripción al programa</h1>
-        <p class="pd-lead pd-lead--inverse">Completá tus datos, elegí el plan y avanzá al pago para activar tu acceso.</p>
+        <p class="pd-lead pd-lead--inverse">Completá tus datos y avanzá al pago para activar tu acceso.</p>
     </div>
 </section>
 
 <section class="pd-section">
     <div class="pd-wrap">
-        <div class="pd-section__head pd-section__head--center">
+        @* <div class="pd-section__head pd-section__head--center">
             <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Planes disponibles</div>
             <h2 class="pd-h2">Elegí tu plan</h2>
-        </div>
+        </div> *@
 
         <form asp-controller="Inscripcion" asp-action="Iniciar" method="post" class="pd-form">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
 
-            <div class="pd-grid pd-grid--3 pd-planes">
+            @* <div class="pd-grid pd-grid--3 pd-planes">
                 @foreach (var plan in Model.PlanesDisponibles)
                 {
                     var caracteristicas = (plan.Caracteristicas ?? "")
@@ -56,7 +56,7 @@
                         </ul>
                     </label>
                 }
-            </div>
+            </div> *@
             <span asp-validation-for="PlanCursoId" class="pd-form__field-error"></span>
 
             <div class="pd-form__seccion">

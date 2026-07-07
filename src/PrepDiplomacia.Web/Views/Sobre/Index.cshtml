@@ -1,10 +1,13 @@
 @inject IContenidoService Contenido
+
 @{
     ViewData["Title"] = "Sobre Prep";
     var intro       = await Contenido.ObtenerAsync("sobre.intro", "");
     var trayectoria = await Contenido.ObtenerAsync("sobre.trayectoria", "");
     var porQue      = await Contenido.ObtenerAsync("sobre.por_que_existe", "");
     var enfoque     = await Contenido.ObtenerAsync("sobre.enfoque", "");
+    var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "prepdiplomaciauy@gmail.com");
+    var contactoIg = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
 }
 
 <section class="pd-page-hero">
@@ -31,8 +34,8 @@
                 <div class="pd-prose">@Html.Raw(enfoque)</div>
             </article>
         </div>
-        @* <aside class="pd-aside">
-            <div class="pd-card">
+         <aside class="pd-aside">
+            @*<div class="pd-card">
                 <h3>Formación y experiencia</h3>
                 <ul class="pd-list">
                     <li>Ex diplomática del Servicio Exterior del Uruguay.</li>
@@ -40,14 +43,39 @@
                     <li>Internacionalista y consultora en relaciones internacionales.</li>
                     <li>Especialización en diplomacia y política exterior.</li>
                 </ul>
-            </div>
+            </div>*@
             <div class="pd-card">
                 <h3>Contacto</h3>
                 <p>Para consultas sobre el programa 2027 o el proceso de inscripción:</p>
-                <a class="pd-link" href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a>
-                <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a>
+
+       
+                <div>
+                    <a href="mailto:@contactoEmail">
+                        <i class="fa-solid fa-envelope me-1"></i> @contactoEmail
+                    </a>
+                </div>
+                @* <a class="pd-link" href="mailto:prepdiplomaciauy@gmail.com">prepdiplomaciauy@gmail.com</a> *@
+
+                <div class>
+                    <a href="https://instagram.com/prepdiplomaciauy"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="fa-brands fa-instagram me-1"></i> @contactoIg
+                    </a>
+                </div>
+                
+
+                @* <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a> *@
+                    <div>
+                    <a href="https://www.linkedin.com/company/prep-diplomacia-uy"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="fa-brands fa-linkedin me-2"></i> prep-diplomacia-uy
+                    </a>
+                    </div>
+                
             </div>
-        </aside> *@
+        </aside>
     </div>
 </section>
 
