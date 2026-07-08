@@ -22,7 +22,7 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="pd-form__error"></div>
 
-            @* <div class="pd-grid pd-grid--3 pd-planes">
+             <div class="pd-grid pd-grid--3 pd-planes">
                 @foreach (var plan in Model.PlanesDisponibles)
                 {
                     var caracteristicas = (plan.Caracteristicas ?? "")
@@ -56,7 +56,7 @@
                         </ul>
                     </label>
                 }
-            </div> *@
+            </div> 
             <span asp-validation-for="PlanCursoId" class="pd-form__field-error"></span>
 
             <div class="pd-form__seccion">
@@ -101,8 +101,8 @@
             </div>
 
             <div class="pd-form__actions">
-                <button type="submit" class="pd-btn pd-btn--blue">Continuar al pago →</button>
-                <small class="pd-form__hint">Al continuar serás redirigido a la pasarela de pago segura de Stripe.</small>
+                <button type="submit" class="pd-btn pd-btn--blue">Preinscripción →</button>
+                @* <small class="pd-form__hint">Al continuar serás redirigido a la pasarela de pago segura de Stripe.</small> *@
             </div>
         </form>
     </div>
