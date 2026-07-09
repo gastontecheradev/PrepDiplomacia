@@ -17,6 +17,22 @@
         });
     }
 
+    /* ── Calendly (popup) ───────────────────────────────────── */
+    // Cualquier elemento con [data-calendly] abre el popup de Calendly.
+    // Si el widget todavía no cargó, cae al href en una pestaña nueva.
+    document.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-calendly]');
+        if (!el) return;
+        var url = el.getAttribute('data-calendly');
+        if (!url) return;
+        if (window.Calendly && typeof window.Calendly.initPopupWidget === 'function') {
+            e.preventDefault();
+            window.Calendly.initPopupWidget({ url: url });
+        }
+        // Si Calendly no está disponible, no hacemos preventDefault:
+        // el navegador sigue el href (target="_blank") como respaldo.
+    });
+
     /* ── Newsletter del footer (AJAX) ──────────────────────── */
     var nlForm = document.getElementById('pd-nl-form');
     var nlMsg  = document.getElementById('pd-nl-msg');

@@ -3,6 +3,8 @@
     ViewData["Title"] = "El Programa";
     var intro = await Contenido.ObtenerAsync("programa.intro",
         "Seis meses de trabajo académico con cursado sincrónico, materiales propios y seguimiento individual.");
+
+    var calendlyUrl = await Contenido.ObtenerAsync("contacto.calendly", "https://calendly.com/prepdiplomaciauy/30min");
 }
 
 <section class="pd-page-hero">
@@ -113,7 +115,8 @@
         <h2 class="pd-h2 pd-h2--inverse">Concurso MRREE 2027</h2>
         <p class="pd-lead pd-lead--inverse">Los cupos son limitados. Reservá tu lugar en el programa.</p>
         <div class="pd-cta-row pd-cta-row--center">
-            <a class="pd-btn pd-btn--gold" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+            <a class="pd-btn pd-btn--gold" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+            <a class="pd-btn pd-btn--ghost" asp-controller="Inscripcion" asp-action="Index">Lista de espera</a>
         </div>
     </div>
 </section>

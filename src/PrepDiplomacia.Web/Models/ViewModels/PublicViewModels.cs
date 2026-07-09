@@ -30,9 +30,9 @@ public class InscripcionViewModel
     [Display(Name = "Consulta o comentario")]
     public string? Consulta { get; set; }
 
-    [Required]
+    // En la etapa de preinscripción no se elige plan; queda opcional.
     [Display(Name = "Plan elegido")]
-    public int PlanCursoId { get; set; }
+    public int? PlanCursoId { get; set; }
 
     [Display(Name = "Modalidad de pago")]
     public ModalidadPago Modalidad { get; set; } = ModalidadPago.PagoUnico;

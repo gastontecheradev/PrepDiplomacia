@@ -8,6 +8,7 @@
     var enfoque     = await Contenido.ObtenerAsync("sobre.enfoque", "");
     var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "prepdiplomaciauy@gmail.com");
     var contactoIg = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
+    var calendlyUrl = await Contenido.ObtenerAsync("contacto.calendly", "https://calendly.com/prepdiplomaciauy/30min");
 }
 
 <section class="pd-page-hero">
@@ -33,6 +34,11 @@
                 <h2 class="pd-h2">Enfoque pedagógico</h2>
                 <div class="pd-prose">@Html.Raw(enfoque)</div>
             </article>
+
+            <div class="pd-bio-cta">
+                <p>¿Querés conversar sobre tu preparación para el concurso?</p>
+                <a class="pd-btn pd-btn--gold" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+            </div>
         </div>
          <aside class="pd-aside">
             @*<div class="pd-card">
@@ -99,7 +105,8 @@
         <h2 class="pd-h2 pd-h2--inverse">¿Te interesa el programa?</h2>
         <p class="pd-lead pd-lead--inverse">Escribinos para recibir información detallada.</p>
         <div class="pd-cta-row pd-cta-row--center">
-            <a class="pd-btn pd-btn--gold" asp-controller="Contacto" asp-action="Index">Obtener más información</a>
+            <a class="pd-btn pd-btn--gold" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+            <a class="pd-btn pd-btn--ghost" asp-controller="Inscripcion" asp-action="Index">Lista de espera</a>
         </div>
     </div>
 </section>

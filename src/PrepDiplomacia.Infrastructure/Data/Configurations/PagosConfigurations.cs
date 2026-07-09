@@ -27,6 +27,7 @@ public class InscripcionConfiguration : IEntityTypeConfiguration<Inscripcion>
         b.HasOne(x => x.PlanCurso)
          .WithMany(p => p.Inscripciones)
          .HasForeignKey(x => x.PlanCursoId)
+         .IsRequired(false)
          .OnDelete(DeleteBehavior.Restrict);
     }
 }

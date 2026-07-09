@@ -19,6 +19,11 @@ public interface IEmailService
         string nombreInscripto, string emailInscripto, string nombrePlan,
         CancellationToken ct = default);
 
+    /// <summary>Confirmación de preinscripción al candidato + notificación al admin (sin pago).</summary>
+    Task<bool> EnviarNotificacionPreinscripcionAsync(
+        string nombreInscripto, string emailInscripto,
+        CancellationToken ct = default);
+
     /// <summary>Notificación al alumno de pago confirmado y acceso habilitado.</summary>
     Task<bool> EnviarConfirmacionPagoAsync(
         string nombreAlumno, string emailAlumno, string nombrePlan,

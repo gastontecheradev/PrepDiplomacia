@@ -129,6 +129,42 @@ public class EmailService : IEmailService
         return ok1 && ok2;
     }
 
+    public async Task<bool> EnviarNotificacionPreinscripcionAsync(
+        string nombreInscripto, string emailInscripto,
+        CancellationToken ct = default)
+    {
+        // 1. Confirmación al candidato (sin mención de pago).
+        var htmlUsuario = $$"""
+            <div style="font-family: Arial, sans-serif; color: #2C3E50; max-width: 600px; margin: auto;">
+                <div style="background: #0C3F67; padding: 30px 20px; color: #fff; text-align: center;">
+                    <h2 style="margin: 0;">¡Recibimos tu preinscripción!</h2>
+                </div>
+                <div style="padding: 28px 24px;">
+                    <p>Hola {{nombreInscripto}},</p>
+                    <p>Recibimos tu preinscripción al programa de Prep Diplomacia para el Concurso MRREE 2027.</p>
+                    <p>Nos pondremos en contacto a la brevedad para conversar sobre tu preparación y darte todos los detalles del programa.</p>
+                    <p>Si querés, podés agendar directamente una videollamada respondiendo a este correo o escribiéndonos a <a href="mailto:prepdiplomaciauy@gmail.com" style="color: #0C3F67;">prepdiplomaciauy@gmail.com</a>.</p>
+                    <p style="margin-top: 30px;">Cordialmente,<br><strong>Carolina Techera</strong><br>Prep Diplomacia</p>
+                </div>
+            </div>
+        """;
+        var ok1 = await EnviarAsync(emailInscripto, "Recibimos tu preinscripción — Prep Diplomacia", htmlUsuario, ct: ct);
+
+        // 2. Notificación al admin.
+        var htmlAdmin = $$"""
+            <p>Nueva preinscripción al programa:</p>
+            <ul>
+                <li><strong>Nombre:</strong> {{nombreInscripto}}</li>
+                <li><strong>Email:</strong> {{emailInscripto}}</li>
+            </ul>
+            <p>Verificá el panel admin para más detalles.</p>
+        """;
+        var ok2 = await EnviarAsync(_opt.DestinoFormularios,
+            $"[Prep Diplomacia] Nueva preinscripción: {nombreInscripto}", htmlAdmin, ct: ct);
+
+        return ok1 && ok2;
+    }
+
     public Task<bool> EnviarConfirmacionPagoAsync(
         string nombreAlumno, string emailAlumno, string nombrePlan,
         decimal monto, string moneda, CancellationToken ct = default)

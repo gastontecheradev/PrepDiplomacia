@@ -17,6 +17,14 @@ public interface IInscripcionService
         string? formacion, string? consulta,
         int planCursoId, ModalidadPago modalidad);
 
+    /// <summary>
+    /// Crea (o reutiliza, por email) una preinscripción sin plan ni pago.
+    /// Queda en estado EnListaDeEspera para gestión manual desde el admin.
+    /// </summary>
+    Task<Inscripcion> CrearPreinscripcionAsync(
+        string nombre, string email, string? telefono,
+        string? formacion, string? consulta);
+
     /// <summary>Activa una inscripción tras pago confirmado, crea/asocia usuario Identity y le asigna rol Alumno.</summary>
     Task<bool> ActivarPostPagoAsync(int inscripcionId, string? stripeCustomerId);
 
@@ -77,6 +85,42 @@ public class InscripcionService : IInscripcionService
             PlanCursoId = planCursoId,
             ModalidadElegida = modalidad,
             Estado = EstadoInscripcion.PagoPendiente
+        };
+        _db.Inscripciones.Add(nueva);
+        await _db.SaveChangesAsync();
+        return nueva;
+    }
+
+    public async Task<Inscripcion> CrearPreinscripcionAsync(
+        string nombre, string email, string? telefono,
+        string? formacion, string? consulta)
+    {
+        // Reutilizamos una preinscripción previa del mismo email que siga
+        // en lista de espera, para no duplicar registros.
+        var existente = await _db.Inscripciones
+            .Where(i => i.Email == email && i.Estado == EstadoInscripcion.EnListaDeEspera)
+            .OrderByDescending(i => i.FechaCreacion)
+            .FirstOrDefaultAsync();
+
+        if (existente is not null)
+        {
+            existente.NombreCompleto = nombre;
+            existente.Telefono = telefono;
+            existente.FormacionAcademica = formacion;
+            existente.ConsultaAdicional = consulta;
+            await _db.SaveChangesAsync();
+            return existente;
+        }
+
+        var nueva = new Inscripcion
+        {
+            NombreCompleto = nombre,
+            Email = email,
+            Telefono = telefono,
+            FormacionAcademica = formacion,
+            ConsultaAdicional = consulta,
+            PlanCursoId = null,
+            Estado = EstadoInscripcion.EnListaDeEspera
         };
         _db.Inscripciones.Add(nueva);
         await _db.SaveChangesAsync();

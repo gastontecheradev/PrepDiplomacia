@@ -24,6 +24,8 @@
 
     var ctaTitulo = await Contenido.ObtenerAsync("home.cta.titulo", "Concurso MRREE 2027 — Inicio del curso en agosto 2026");
     var ctaTexto  = await Contenido.ObtenerAsync("home.cta.texto",  "Las inscripciones abren en junio de 2027. Los cupos son limitados.");
+
+    var calendlyUrl = await Contenido.ObtenerAsync("contacto.calendly", "https://calendly.com/prepdiplomaciauy/30min");
 }
 
 @* ───────────── HERO ───────────── *@
@@ -37,7 +39,7 @@
             </h1>
             <p class="pd-lead">@heroDesc</p>
             <div class="pd-cta-row">
-                <a class="pd-btn pd-btn--blue" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+                <a class="pd-btn pd-btn--gold" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
                 <a class="pd-btn pd-btn--outline" asp-controller="Programa" asp-action="Index">El Programa →</a>
             </div>
         </div>
@@ -180,8 +182,8 @@
         <h2 class="pd-h2 pd-h2--inverse">@ctaTitulo</h2>
         <p class="pd-lead pd-lead--inverse">@ctaTexto</p>
         <div class="pd-cta-row pd-cta-row--center">
-            <a class="pd-btn pd-btn--gold" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
-            <a class="pd-btn pd-btn--ghost" asp-controller="Contacto" asp-action="Index">Contactar</a>
+            <a class="pd-btn pd-btn--gold" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+            <a class="pd-btn pd-btn--ghost" asp-controller="Inscripcion" asp-action="Index">Lista de espera</a>
         </div>
     </div>
 </section>

@@ -30,8 +30,13 @@ public class Inscripcion : EntidadBase
     [MaxLength(450)]
     public string? UsuarioId { get; set; }
 
-    public int PlanCursoId { get; set; }
-    public PlanCurso PlanCurso { get; set; } = null!;
+    /// <summary>
+    /// Plan elegido. Opcional: en la etapa de preinscripción el candidato
+    /// deja sus datos sin seleccionar plan ni pagar (queda EnListaDeEspera).
+    /// Se completa más adelante si se reactiva el flujo de pago.
+    /// </summary>
+    public int? PlanCursoId { get; set; }
+    public PlanCurso? PlanCurso { get; set; }
 
     public ModalidadPago ModalidadElegida { get; set; }
 

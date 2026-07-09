@@ -300,6 +300,8 @@ button { font-family: inherit; cursor: pointer; }
 /* ── Bio / Aside ─────────────────────────────────────────── */
 .pd-bio          { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid var(--borde); }
 .pd-bio:last-child { border-bottom: 0; }
+.pd-bio-cta      { background: var(--gris); border-left: 3px solid var(--dorado); padding: 1.75rem 2rem; }
+.pd-bio-cta p    { font-family: var(--f-display); font-size: 1.15rem; color: var(--azul); margin-bottom: 1.25rem; }
 .pd-aside        { display: flex; flex-direction: column; gap: 1.25rem; }
 .pd-prose p      { margin-bottom: 1rem; line-height: 1.8; }
 .pd-prose h2     { font-family: var(--f-display); color: var(--azul); margin: 1.4rem 0 0.6rem; }

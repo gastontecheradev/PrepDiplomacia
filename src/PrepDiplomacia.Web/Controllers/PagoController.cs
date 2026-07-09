@@ -53,7 +53,10 @@ public class PagoController : Controller
         var inscripcion = await _inscripciones.ObtenerPorIdAsync(id);
         if (inscripcion is null) return NotFound();
 
-        var plan = await _planes.ObtenerPorIdAsync(inscripcion.PlanCursoId);
+        // Las preinscripciones no tienen plan asociado: no aplican al checkout.
+        if (inscripcion.PlanCursoId is not int planCursoId) return NotFound();
+
+        var plan = await _planes.ObtenerPorIdAsync(planCursoId);
         if (plan is null) return NotFound();
 
         // Si Stripe no está configurado, mostramos un mensaje en la vista.
@@ -198,7 +201,9 @@ public class PagoController : Controller
         var inscripcion = await _inscripciones.ObtenerPorIdAsync(inscripcionId);
         if (inscripcion is null) return;
 
-        var plan = await _planes.ObtenerPorIdAsync(inscripcion.PlanCursoId);
+        var plan = inscripcion.PlanCursoId is int planCursoId
+            ? await _planes.ObtenerPorIdAsync(planCursoId)
+            : null;
 
         // Buscar el Pago "Pendiente" creado al iniciar Checkout.
         var pago = await _db.Pagos.FirstOrDefaultAsync(p => p.StripeSessionId == session.Id);
