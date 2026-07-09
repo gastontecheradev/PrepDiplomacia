@@ -38,7 +38,7 @@ public class InscripcionViewModel
     public ModalidadPago Modalidad { get; set; } = ModalidadPago.PagoUnico;
 
     [Display(Name = "Acepto los Términos y Condiciones y la Política de Privacidad.")]
-    [Range(typeof(bool), "true", "true", ErrorMessage = "Debés aceptar los términos para continuar.")]
+    [MustBeTrue(ErrorMessage = "Debés aceptar los términos para continuar.")]
     public bool AceptaTerminos { get; set; }
 
     public List<PlanCurso> PlanesDisponibles { get; set; } = new();
@@ -85,4 +85,16 @@ public class BlogPaginadoViewModel
     public int? TagId { get; set; }
     public List<CategoriaBlog> Categorias { get; set; } = new();
     public List<TagBlog> Tags { get; set; } = new();
+}
+
+// ── Validación ──────────────────────────────────────────────────────────────
+/// <summary>
+/// Exige que un bool sea true (p. ej. aceptar términos). Se valida en el
+/// servidor; evita la regla de cliente rota que produce [Range(typeof(bool)…)]
+/// en checkboxes (marcaba error aunque la casilla estuviera tildada).
+/// </summary>
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+public sealed class MustBeTrueAttribute : ValidationAttribute
+{
+    public override bool IsValid(object? value) => value is true;
 }
