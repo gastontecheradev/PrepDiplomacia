@@ -181,7 +181,7 @@ public static class SeedInicial
             // ── CONTACTO ──
             new() { Clave = "contacto.email", Etiqueta = "Email de contacto público",
                     Seccion = "Contacto", Tipo = "texto", Orden = 1,
-                    Valor = "prepdiplomaciauy@gmail.com" },
+                    Valor = "contacto@prepdiplomacia.com" },
             new() { Clave = "contacto.instagram", Etiqueta = "Instagram",
                     Seccion = "Contacto", Tipo = "texto", Orden = 2,
                     Valor = "@prepdiplomaciauy" },

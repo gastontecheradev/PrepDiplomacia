@@ -3,7 +3,7 @@
 @inject UserManager<UsuarioAplicacion> UserManager
 
 @{
-    var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "prepdiplomaciauy@gmail.com");
+    var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "contacto@prepdiplomacia.com");
     var contactoIg    = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
     var calendlyUrl   = await Contenido.ObtenerAsync("contacto.calendly", "https://calendly.com/prepdiplomaciauy/30min");
     var rutaActual    = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
