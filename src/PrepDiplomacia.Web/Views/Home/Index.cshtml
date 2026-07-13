@@ -8,6 +8,8 @@
     var heroT2        = await Contenido.ObtenerAsync("home.hero.titulo2",   "Diplomacia");
     var heroDesc      = await Contenido.ObtenerAsync("home.hero.descripcion","Formación especializada para el Concurso de Ingreso al Servicio Exterior de Uruguay.");
 
+    var agendaUrl     = await Contenido.ObtenerAsync("contacto.agenda", "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ34thMaP_qXgHVOTFXnuT9xvr2rpyvAVK-X8XoSoigx5kXStdJZkKwjm6hTUCheLJvUm3jGNfcN");
+
     var porqueEyebrow = await Contenido.ObtenerAsync("home.porque.eyebrow", "Por qué elegirnos");
     var porqueTitulo  = await Contenido.ObtenerAsync("home.porque.titulo",  "Por qué Prep Diplomacia");
     var porqueIntro   = await Contenido.ObtenerAsync("home.porque.intro",   "");
@@ -37,7 +39,7 @@
             </h1>
             <p class="pd-lead">@heroDesc</p>
             <div class="pd-cta-row">
-                <a class="pd-btn pd-btn--blue" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
+                <a class="pd-btn pd-btn--gold" href="@agendaUrl" target="_blank" rel="noopener">Agendá una llamada</a>
                 <a class="pd-btn pd-btn--outline" asp-controller="Programa" asp-action="Index">El Programa →</a>
             </div>
         </div>
@@ -180,8 +182,8 @@
         <h2 class="pd-h2 pd-h2--inverse">@ctaTitulo</h2>
         <p class="pd-lead pd-lead--inverse">@ctaTexto</p>
         <div class="pd-cta-row pd-cta-row--center">
-            <a class="pd-btn pd-btn--gold" asp-controller="Inscripcion" asp-action="Index">Inscribirme</a>
-            <a class="pd-btn pd-btn--ghost" asp-controller="Contacto" asp-action="Index">Contactar</a>
+            <a class="pd-btn pd-btn--gold" href="@agendaUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+            <a class="pd-btn pd-btn--ghost" asp-controller="Inscripcion" asp-action="Index">Preinscripción</a>
         </div>
     </div>
 </section>

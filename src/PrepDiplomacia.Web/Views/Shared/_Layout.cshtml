@@ -5,7 +5,7 @@
 @{
     var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "contacto@prepdiplomacia.com");
     var contactoIg    = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
-    var calendlyUrl   = await Contenido.ObtenerAsync("contacto.calendly", "https://calendly.com/prepdiplomaciauy/30min");
+    var agendaUrl     = await Contenido.ObtenerAsync("contacto.agenda", "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ34thMaP_qXgHVOTFXnuT9xvr2rpyvAVK-X8XoSoigx5kXStdJZkKwjm6hTUCheLJvUm3jGNfcN");
     var rutaActual    = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
     string EsActivo(string segmento) => rutaActual.StartsWith(segmento) ? "active" : "";
 }
@@ -28,10 +28,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- Calendly (popup widget) -->
-    <link rel="stylesheet"
-          href="https://assets.calendly.com/assets/external/widget.css">
 
     <!-- Open Graph -->
     <meta property="og:title" content="PrepDiplomacia" />
@@ -78,7 +74,7 @@
                     <a class="pd-nav__link pd-nav__link--ghost" asp-controller="Cuenta" asp-action="Login">Ingresar</a>
                 }
 
-                <a class="pd-btn pd-btn--gold pd-nav__cta" href="@calendlyUrl" data-calendly="@calendlyUrl" target="_blank" rel="noopener">Agendá una llamada</a>
+                <a class="pd-btn pd-btn--gold pd-nav__cta" href="@agendaUrl" target="_blank" rel="noopener">Agendá una llamada</a>
             </nav>
 
             <button class="pd-nav__toggle" aria-label="Menú" aria-expanded="false" type="button">
@@ -161,9 +157,6 @@
             <span>Prep Diplomacia - @DateTime.Now.Year.</span>
         </div>
     </footer>
-
-    <!-- Calendly (popup widget) -->
-    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
