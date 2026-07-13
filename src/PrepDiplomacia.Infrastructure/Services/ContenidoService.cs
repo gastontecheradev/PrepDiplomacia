@@ -24,6 +24,13 @@ public interface IContenidoService
     /// <summary>Actualiza el valor de un bloque por clave. Invalida cache.</summary>
     Task<bool> ActualizarAsync(int id, string nuevoValor);
 
+    /// <summary>
+    /// Crea o actualiza un bloque por su clave (upsert). Se usa cuando el valor
+    /// no lo tipea el admin sino que lo genera el sistema (ej. la URL del PDF subido).
+    /// </summary>
+    Task ActualizarPorClaveAsync(string clave, string valor, string etiqueta,
+                                 string? seccion = null, string? ayuda = null);
+
     /// <summary>Invalida el cache (llamado tras edición desde admin).</summary>
     void InvalidarCache();
 }
@@ -78,6 +85,29 @@ public class ContenidoService : IContenidoService
         await _db.SaveChangesAsync();
         InvalidarCache();
         return true;
+    }
+
+    public async Task ActualizarPorClaveAsync(string clave, string valor, string etiqueta,
+                                              string? seccion = null, string? ayuda = null)
+    {
+        var bloque = await _db.BloquesContenido.FirstOrDefaultAsync(b => b.Clave == clave);
+
+        if (bloque is null)
+        {
+            bloque = new BloqueContenido
+            {
+                Clave    = clave,
+                Etiqueta = etiqueta,
+                Seccion  = seccion,
+                Tipo     = "texto",
+                Ayuda    = ayuda
+            };
+            _db.BloquesContenido.Add(bloque);
+        }
+
+        bloque.Valor = valor ?? string.Empty;
+        await _db.SaveChangesAsync();
+        InvalidarCache();
     }
 
     public void InvalidarCache() => _cache.Remove(CacheKeyDiccionario);

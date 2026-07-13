@@ -5,6 +5,9 @@
         "Seis meses de trabajo académico con cursado sincrónico, materiales propios y seguimiento individual.");
 
     var agendaUrl = await Contenido.ObtenerAsync("contacto.agenda", "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ34thMaP_qXgHVOTFXnuT9xvr2rpyvAVK-X8XoSoigx5kXStdJZkKwjm6hTUCheLJvUm3jGNfcN");
+
+    // PDF que el admin sube desde Admin › Material descargable. Vacío = no se muestra el bloque.
+    var pdfUrl = await Contenido.ObtenerAsync("programa.pdf.url");
 }
 
 <section class="pd-page-hero">
@@ -109,6 +112,28 @@
         </div>
     </div>
 </section>
+
+@if (!string.IsNullOrWhiteSpace(pdfUrl))
+{
+    <section class="pd-section">
+        <div class="pd-wrap">
+            <div class="pd-descarga">
+                <div class="pd-descarga__txt">
+                    <div class="pd-eyebrow"><span class="pd-eyebrow__line"></span>Material descargable</div>
+                    <h2 class="pd-h2">Qué vas a encontrar en el curso</h2>
+                    <p>Descargá el detalle completo del programa: las seis pruebas del concurso, las etapas
+                       de cursado, la metodología de trabajo y qué evalúa realmente el tribunal.</p>
+                </div>
+                <div class="pd-descarga__btn">
+                    <a class="pd-btn pd-btn--gold" href="@pdfUrl" download>
+                        <i class="fa-solid fa-file-pdf"></i>&nbsp; Descargar PDF
+                    </a>
+                    <small>PDF</small>
+                </div>
+            </div>
+        </div>
+    </section>
+}
 
 <section class="pd-cta">
     <div class="pd-wrap pd-cta__inner">

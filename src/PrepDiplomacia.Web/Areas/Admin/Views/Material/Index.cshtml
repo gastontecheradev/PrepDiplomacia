@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Material descargable";
+    var urlActual    = ViewBag.UrlActual as string;
+    var nombreActual = ViewBag.NombreActual as string;
+    var hayPdf       = !string.IsNullOrWhiteSpace(urlActual);
+}
+
+<header class="pd-admin__head">
+    <div>
+        <h1>Material descargable</h1>
+        <p>PDF «Qué vas a encontrar en el curso». Se muestra como botón de descarga en la página del Programa.</p>
+    </div>
+</header>
+
+@if (hayPdf)
+{
+    <div class="pd-card">
+        <h2>PDF actual</h2>
+        <p style="margin-top: 8px;">
+            <i class="fa-solid fa-file-pdf"></i>&nbsp;
+            <a href="@urlActual" target="_blank" rel="noopener">
+                @(string.IsNullOrWhiteSpace(nombreActual) ? "Ver PDF publicado" : nombreActual)
+            </a>
+        </p>
+        <p><small>Está publicado y visible para los visitantes del sitio.</small></p>
+
+        <form asp-action="Quitar" method="post" style="margin-top: 12px;"
+              onsubmit="return confirm('¿Quitar el PDF? El bloque de descarga dejará de mostrarse en el sitio.');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="pd-btn pd-btn--outline">Quitar PDF</button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="pd-empty">
+        <p>Todavía no hay ningún PDF publicado. Mientras no subas uno, el bloque de descarga no aparece en el sitio.</p>
+    </div>
+}
+
+<div class="pd-card" style="margin-top: 20px;">
+    <h2>@(hayPdf ? "Reemplazar el PDF" : "Subir el PDF")</h2>
+    <p><small>Solo archivos PDF, hasta 15 MB. Al subir uno nuevo, el anterior se elimina automáticamente.</small></p>
+
+    <form asp-action="Subir" method="post" enctype="multipart/form-data" style="margin-top: 12px;">
+        @Html.AntiForgeryToken()
+        <div class="pd-form__field">
+            <label for="archivo">Archivo PDF</label>
+            <input type="file" id="archivo" name="archivo" accept="application/pdf,.pdf" required />
+        </div>
+        <button type="submit" class="pd-btn pd-btn--blue" style="margin-top: 12px;">
+            @(hayPdf ? "Reemplazar PDF" : "Publicar PDF")
+        </button>
+    </form>
+</div>

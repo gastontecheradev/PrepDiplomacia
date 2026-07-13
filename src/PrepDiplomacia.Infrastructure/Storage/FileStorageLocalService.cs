@@ -13,6 +13,13 @@ public interface IFileStorageService
     Task<string?> GuardarImagenAsync(IFormFile archivo, string subcarpeta,
                                      CancellationToken ct = default);
 
+    /// <summary>
+    /// Guarda un documento (PDF) subido en una subcarpeta de /wwwroot/uploads.
+    /// Retorna el path relativo (ej. "/uploads/material/abc123.pdf").
+    /// </summary>
+    Task<string?> GuardarDocumentoAsync(IFormFile archivo, string subcarpeta,
+                                        CancellationToken ct = default);
+
     /// <summary>Elimina un archivo existente. No falla si no existe.</summary>
     void Eliminar(string? rutaRelativa);
 }
@@ -31,7 +38,10 @@ public class FileStorageLocalService : IFileStorageService
     private static readonly string[] ExtensionesPermitidas =
         new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg" };
 
+    private static readonly string[] ExtensionesDocumento = new[] { ".pdf" };
+
     private const long TamañoMaximoBytes = 5 * 1024 * 1024; // 5 MB
+    private const long TamañoMaximoDocumentoBytes = 15 * 1024 * 1024; // 15 MB
 
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<FileStorageLocalService> _logger;
@@ -74,6 +84,41 @@ public class FileStorageLocalService : IFileStorageService
 
         var rutaRelativa = $"/uploads/{sub}/{nombreArchivo}";
         _logger.LogInformation("Imagen guardada: {Ruta}", rutaRelativa);
+        return rutaRelativa;
+    }
+
+    public async Task<string?> GuardarDocumentoAsync(IFormFile archivo, string subcarpeta,
+                                                     CancellationToken ct = default)
+    {
+        if (archivo is null || archivo.Length == 0) return null;
+
+        if (archivo.Length > TamañoMaximoDocumentoBytes)
+        {
+            _logger.LogWarning("Documento demasiado grande: {Tamaño} bytes", archivo.Length);
+            throw new InvalidOperationException(
+                $"El archivo supera el tamaño máximo de {TamañoMaximoDocumentoBytes / (1024 * 1024)} MB.");
+        }
+
+        var ext = Path.GetExtension(archivo.FileName).ToLowerInvariant();
+        if (!ExtensionesDocumento.Contains(ext))
+            throw new InvalidOperationException("Solo se permiten archivos PDF.");
+
+        var sub = string.Concat(subcarpeta.Where(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'));
+        if (string.IsNullOrEmpty(sub)) sub = "general";
+
+        var carpetaAbsoluta = Path.Combine(_env.WebRootPath, "uploads", sub);
+        Directory.CreateDirectory(carpetaAbsoluta);
+
+        var nombreArchivo = $"{Guid.NewGuid():N}{ext}";
+        var rutaAbsoluta = Path.Combine(carpetaAbsoluta, nombreArchivo);
+
+        await using (var stream = File.Create(rutaAbsoluta))
+        {
+            await archivo.CopyToAsync(stream, ct);
+        }
+
+        var rutaRelativa = $"/uploads/{sub}/{nombreArchivo}";
+        _logger.LogInformation("Documento guardado: {Ruta}", rutaRelativa);
         return rutaRelativa;
     }
 
