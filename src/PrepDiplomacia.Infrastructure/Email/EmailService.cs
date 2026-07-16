@@ -106,7 +106,7 @@ public class EmailService : IEmailService
                     <p>Hola {{nombreInscripto}},</p>
                     <p>Recibimos tu inscripción al <strong>{{nombrePlan}}</strong> de Prep Diplomacia.</p>
                     <p>En breve te llegará un segundo correo con los pasos siguientes para concretar el pago y activar tu acceso.</p>
-                    <p>Si tenés cualquier consulta podés responder a este correo o escribirnos a <a href="mailto:prepdiplomaciauy@gmail.com" style="color: #0C3F67;">prepdiplomaciauy@gmail.com</a>.</p>
+                    <p>Si tenés cualquier consulta podés responder a este correo o escribirnos a <a href="mailto:contacto@prepdiplomacia.com" style="color: #0C3F67;">contacto@prepdiplomacia.com</a>.</p>
                     <p style="margin-top: 30px;">Cordialmente,<br><strong>Carolina Techera</strong><br>Prep Diplomacia</p>
                 </div>
             </div>
@@ -143,7 +143,7 @@ public class EmailService : IEmailService
                     <p>Hola {{nombreInscripto}},</p>
                     <p>Recibimos tu preinscripción al programa de Prep Diplomacia para el Concurso MRREE 2027.</p>
                     <p>Nos pondremos en contacto a la brevedad para conversar sobre tu preparación y darte todos los detalles del programa.</p>
-                    <p>Si querés, podés agendar directamente una videollamada respondiendo a este correo o escribiéndonos a <a href="mailto:prepdiplomaciauy@gmail.com" style="color: #0C3F67;">prepdiplomaciauy@gmail.com</a>.</p>
+                    <p>Si querés, podés agendar directamente una videollamada respondiendo a este correo o escribiéndonos a <a href="mailto:contacto@prepdiplomacia.com" style="color: #0C3F67;">contacto@prepdiplomacia.com</a>.</p>
                     <p style="margin-top: 30px;">Cordialmente,<br><strong>Carolina Techera</strong><br>Prep Diplomacia</p>
                 </div>
             </div>
@@ -181,7 +181,7 @@ public class EmailService : IEmailService
                     <p style="text-align: center; margin: 30px 0;">
                         <a href="https://prepdiplomacia.uy/cuenta/login" style="background: #F3BD2D; color: #061d30; padding: 12px 28px; text-decoration: none; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px;">Ingresar al área de alumnos</a>
                     </p>
-                    <p>Cualquier consulta, escribinos a <a href="mailto:prepdiplomaciauy@gmail.com" style="color: #0C3F67;">prepdiplomaciauy@gmail.com</a>.</p>
+                    <p>Cualquier consulta, escribinos a <a href="mailto:contacto@prepdiplomacia.com" style="color: #0C3F67;">contacto@prepdiplomacia.com</a>.</p>
                     <p style="margin-top: 30px;">Bienvenido al programa.<br><strong>Carolina Techera</strong><br>Prep Diplomacia</p>
                 </div>
             </div>

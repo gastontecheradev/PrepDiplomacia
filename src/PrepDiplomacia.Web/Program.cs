@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PrepDiplomacia.Infrastructure.Data;
@@ -80,6 +81,15 @@ builder.Services.AddHttpContextAccessor();
 
 // ── Build y pipeline ────────────────────────────────────────────────────────
 var app = builder.Build();
+
+// ── Cultura: fechas y nombres de meses en español ───────────────────────────
+// Sin esto, ToString("MMMM") devuelve los meses en inglés ("June").
+// Conservamos el formato numérico invariante (separador decimal ".") para no
+// alterar el binding de decimales en formularios ni la integración con Stripe.
+var culturaEs = (CultureInfo)CultureInfo.GetCultureInfo("es-UY").Clone();
+culturaEs.NumberFormat = CultureInfo.InvariantCulture.NumberFormat;
+CultureInfo.DefaultThreadCurrentCulture   = culturaEs;
+CultureInfo.DefaultThreadCurrentUICulture = culturaEs;
 
 if (!app.Environment.IsDevelopment())
 {

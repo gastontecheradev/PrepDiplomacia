@@ -1,0 +1,56 @@
+@model PostBlog
+@{
+    ViewData["Title"] = Model.Titulo;
+    ViewData["Description"] = Model.MetaDescripcion ?? Model.Resumen;
+}
+
+<section class="pd-section">
+    <article class="pd-wrap pd-post" style="max-width: 760px;">
+
+        @* La imagen va primero: encabeza la nota, antes del título y la fecha. *@
+        @if (!string.IsNullOrEmpty(Model.ImagenDestacada))
+        {
+            <figure class="pd-post__hero">
+                <img src="@Model.ImagenDestacada" alt="@(Model.ImagenAlt ?? Model.Titulo)" />
+            </figure>
+        }
+
+        <header class="pd-post__head">
+            @if (Model.Categoria is not null)
+            {
+                <span class="pd-tag" style="background:@(Model.Categoria.Color ?? "#0C3F67"); color:#fff;">@Model.Categoria.Nombre</span>
+            }
+            <h1 class="pd-h1" style="color: var(--azul); margin-top: 12px;">@Model.Titulo</h1>
+            <small class="pd-post__meta">
+                @Model.FechaPublicacion?.ToString("d 'de' MMMM 'de' yyyy") ·
+                @Model.Vistas vistas
+            </small>
+        </header>
+
+        @if (!string.IsNullOrEmpty(Model.YouTubeVideoId))
+        {
+            <div class="pd-post__video">
+                <iframe src="https://www.youtube.com/embed/@Model.YouTubeVideoId"
+                        title="Video" frameborder="0" allowfullscreen></iframe>
+            </div>
+        }
+
+        <div class="pd-prose">
+            @Html.Raw(Model.Contenido)
+        </div>
+
+        @if (Model.PostTags.Any())
+        {
+            <div class="pd-post__tags">
+                @foreach (var pt in Model.PostTags)
+                {
+                    <a class="pd-tag pd-tag--small" asp-controller="Noticias" asp-action="Index" asp-route-tagId="@pt.TagBlog.Id">#@pt.TagBlog.Nombre</a>
+                }
+            </div>
+        }
+
+        <div style="margin-top: 32px;">
+            <a class="pd-btn pd-btn--outline" asp-controller="Noticias" asp-action="Index">← Volver a Noticias</a>
+        </div>
+    </article>
+</section>

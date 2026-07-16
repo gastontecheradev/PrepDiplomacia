@@ -329,7 +329,7 @@ public class PagoController : Controller
 
         // Notificar al admin para hacer seguimiento.
         await _email.EnviarAsync(
-            "prepdiplomaciauy@gmail.com",
+            "contacto@prepdiplomacia.com",
             $"[Prep Diplomacia] Cuota fallida — Inscripción #{pagoExistente.InscripcionId}",
             $"<p>Falló el cobro de una cuota.</p><p>Subscription: {invoice.SubscriptionId}</p><p>Invoice: {invoice.Id}</p>");
     }

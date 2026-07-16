@@ -39,6 +39,11 @@ public class PostBlog : EntidadBase
 
     public EstadoPublicacion Estado { get; set; } = EstadoPublicacion.Borrador;
 
+    /// <summary>
+    /// Determina la sección pública donde aparece: Blog (/blog) o Noticias (/noticias).
+    /// </summary>
+    public TipoPublicacion Tipo { get; set; } = TipoPublicacion.Articulo;
+
     public DateTime? FechaPublicacion { get; set; }
 
     /// <summary>Cantidad de vistas — incrementada al abrir el post.</summary>

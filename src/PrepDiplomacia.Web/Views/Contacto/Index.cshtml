@@ -1,5 +1,12 @@
+@inject IContenidoService Contenido
+
 @model ContactoViewModel
-@{ ViewData["Title"] = "Contacto"; }
+@{
+    ViewData["Title"] = "Contacto";
+    var contactoEmail = await Contenido.ObtenerAsync("contacto.email", "contacto@prepdiplomacia.com");
+    var contactoIg = await Contenido.ObtenerAsync("contacto.instagram", "@prepdiplomaciauy");
+    var agendaUrl = await Contenido.ObtenerAsync("contacto.agenda", "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ34thMaP_qXgHVOTFXnuT9xvr2rpyvAVK-X8XoSoigx5kXStdJZkKwjm6hTUCheLJvUm3jGNfcN");
+}
 
 <section class="pd-page-hero">
     <div class="pd-wrap">
@@ -45,11 +52,54 @@
         </form>
 
         <aside class="pd-aside">
-            <div class="pd-card">
+
+
+
+
+            @* <div class="pd-card">
                 <h3>Datos de contacto</h3>
                 <a class="pd-link" href="mailto:contacto@prepdiplomacia.com">contacto@prepdiplomacia.com</a>
                 <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a>
+            </div> *@
+
+
+
+
+
+            <div class="pd-card">
+                <h3>Datos de contacto</h3>
+                <div>
+                    <a href="mailto:@contactoEmail">
+                        <i class="fa-solid fa-envelope me-1"></i> @contactoEmail
+                    </a>
+                </div>
+                @* <a class="pd-link" href="mailto:contacto@prepdiplomacia.com">contacto@prepdiplomacia.com</a> *@
+
+                <div>
+                    <a href="https://instagram.com/prepdiplomaciauy"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="fa-brands fa-instagram me-1"></i> @contactoIg
+                    </a>
+                </div>
+
+                
+                @* <a class="pd-link pd-link--muted" href="https://instagram.com/prepdiplomaciauy" target="_blank" rel="noopener">@("@prepdiplomaciauy")</a> *@
+                <div>
+                    <a href="https://www.linkedin.com/company/prep-diplomacia-uy"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="fa-brands fa-linkedin me-2"></i> prep-diplomacia-uy
+                    </a>
+                </div>
             </div>
+
+
+
+
+
+
+
             <div class="pd-card">
                 <h3>Tiempo de respuesta</h3>
                 <p>Respondemos las consultas en un plazo de hasta 48 horas hábiles.</p>

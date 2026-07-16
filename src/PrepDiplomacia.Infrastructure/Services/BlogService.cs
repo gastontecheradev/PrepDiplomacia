@@ -10,16 +10,19 @@ public interface IBlogService
     /// <summary>Posts publicados, paginados y filtrables. Para el sitio público.</summary>
     Task<(List<PostBlog> posts, int total)> ListarPublicadosAsync(
         int pagina = 1, int tamanioPagina = 9,
-        int? categoriaId = null, int? tagId = null, string? busqueda = null);
+        int? categoriaId = null, int? tagId = null, string? busqueda = null,
+        TipoPublicacion tipo = TipoPublicacion.Articulo);
 
     /// <summary>Post publicado por slug. Incluye categoría, tags y comentarios aprobados.</summary>
-    Task<PostBlog?> ObtenerPublicadoPorSlugAsync(string slug);
+    Task<PostBlog?> ObtenerPublicadoPorSlugAsync(string slug,
+        TipoPublicacion tipo = TipoPublicacion.Articulo);
 
     /// <summary>Posts más recientes (sidebar / footer del blog).</summary>
-    Task<List<PostBlog>> ObtenerRecientesAsync(int cantidad = 5);
+    Task<List<PostBlog>> ObtenerRecientesAsync(int cantidad = 5,
+        TipoPublicacion tipo = TipoPublicacion.Articulo);
 
     /// <summary>Para el listado del admin.</summary>
-    Task<List<PostBlog>> ListarTodosAsync();
+    Task<List<PostBlog>> ListarTodosAsync(TipoPublicacion tipo = TipoPublicacion.Articulo);
 
     Task<PostBlog?> ObtenerPorIdAsync(int id);
 
@@ -48,7 +51,8 @@ public class BlogService : IBlogService
 
     public async Task<(List<PostBlog> posts, int total)> ListarPublicadosAsync(
         int pagina = 1, int tamanioPagina = 9,
-        int? categoriaId = null, int? tagId = null, string? busqueda = null)
+        int? categoriaId = null, int? tagId = null, string? busqueda = null,
+        TipoPublicacion tipo = TipoPublicacion.Articulo)
     {
         if (pagina < 1) pagina = 1;
         if (tamanioPagina < 1) tamanioPagina = 9;
@@ -56,7 +60,8 @@ public class BlogService : IBlogService
         var query = _db.Posts
             .Include(p => p.Categoria)
             .Include(p => p.PostTags).ThenInclude(pt => pt.TagBlog)
-            .Where(p => p.Estado == EstadoPublicacion.Publicado
+            .Where(p => p.Tipo == tipo
+                     && p.Estado == EstadoPublicacion.Publicado
                      && p.FechaPublicacion <= DateTime.UtcNow)
             .AsQueryable();
 
@@ -86,26 +91,31 @@ public class BlogService : IBlogService
         return (posts, total);
     }
 
-    public Task<PostBlog?> ObtenerPublicadoPorSlugAsync(string slug)
+    public Task<PostBlog?> ObtenerPublicadoPorSlugAsync(string slug,
+        TipoPublicacion tipo = TipoPublicacion.Articulo)
     {
         return _db.Posts
             .Include(p => p.Categoria)
             .Include(p => p.PostTags).ThenInclude(pt => pt.TagBlog)
             .Include(p => p.Comentarios.Where(c => c.Aprobado))
-            .Where(p => p.Slug == slug && p.Estado == EstadoPublicacion.Publicado)
+            .Where(p => p.Slug == slug
+                     && p.Tipo == tipo
+                     && p.Estado == EstadoPublicacion.Publicado)
             .FirstOrDefaultAsync();
     }
 
-    public Task<List<PostBlog>> ObtenerRecientesAsync(int cantidad = 5) =>
+    public Task<List<PostBlog>> ObtenerRecientesAsync(int cantidad = 5,
+        TipoPublicacion tipo = TipoPublicacion.Articulo) =>
         _db.Posts
            .Include(p => p.Categoria)
-           .Where(p => p.Estado == EstadoPublicacion.Publicado)
+           .Where(p => p.Tipo == tipo && p.Estado == EstadoPublicacion.Publicado)
            .OrderByDescending(p => p.FechaPublicacion)
            .Take(cantidad).ToListAsync();
 
-    public Task<List<PostBlog>> ListarTodosAsync() =>
+    public Task<List<PostBlog>> ListarTodosAsync(TipoPublicacion tipo = TipoPublicacion.Articulo) =>
         _db.Posts
            .Include(p => p.Categoria)
+           .Where(p => p.Tipo == tipo)
            .OrderByDescending(p => p.FechaCreacion)
            .ToListAsync();
 
@@ -164,6 +174,7 @@ public class BlogService : IBlogService
             existente.FechaPublicacion = DateTime.UtcNow;
         }
         existente.Estado = post.Estado;
+        existente.Tipo = post.Tipo;
 
         // Reemplazar tags.
         _db.PostTags.RemoveRange(existente.PostTags);

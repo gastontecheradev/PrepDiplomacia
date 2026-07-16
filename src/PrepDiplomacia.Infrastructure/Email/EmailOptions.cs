@@ -7,7 +7,7 @@ namespace PrepDiplomacia.Infrastructure.Email;
 /// Ejemplo (user-secrets):
 ///   dotnet user-secrets set "Email:Smtp:Host"     "smtp.gmail.com"
 ///   dotnet user-secrets set "Email:Smtp:Port"     "587"
-///   dotnet user-secrets set "Email:Smtp:Usuario"  "prepdiplomaciauy@gmail.com"
+///   dotnet user-secrets set "Email:Smtp:Usuario"  "contacto@prepdiplomacia.com"
 ///   dotnet user-secrets set "Email:Smtp:Password" "xxxx xxxx xxxx xxxx"   // App Password
 /// </summary>
 public class EmailOptions
@@ -17,13 +17,13 @@ public class EmailOptions
     public SmtpOptions Smtp { get; set; } = new();
 
     /// <summary>Email "From" mostrado al destinatario.</summary>
-    public string FromEmail { get; set; } = "prepdiplomaciauy@gmail.com";
+    public string FromEmail { get; set; } = "contacto@prepdiplomacia.com";
 
     /// <summary>Nombre "From" mostrado al destinatario.</summary>
     public string FromNombre { get; set; } = "Prep Diplomacia";
 
     /// <summary>Dirección a la que se envían los formularios de contacto.</summary>
-    public string DestinoFormularios { get; set; } = "prepdiplomaciauy@gmail.com";
+    public string DestinoFormularios { get; set; } = "contacto@prepdiplomacia.com";
 }
 
 public class SmtpOptions

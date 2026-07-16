@@ -55,7 +55,7 @@ public static class SeedInicial
     IConfiguration config,
     ILogger logger)
     {
-        var email = config["Admin:Email"] ?? "prepdiplomaciauy@gmail.com";
+        var email = config["Admin:Email"] ?? "contacto@prepdiplomacia.com";
         var nombreCompleto = config["Admin:NombreCompleto"] ?? "Carolina Techera";
         var password = config["Admin:Password"];
 
