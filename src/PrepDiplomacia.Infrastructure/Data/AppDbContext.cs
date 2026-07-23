@@ -9,9 +9,9 @@ namespace PrepDiplomacia.Infrastructure.Data;
 /// <summary>
 /// DbContext principal que integra Identity y las entidades de dominio.
 ///
-/// Soporta tanto SQLite (desarrollo y arranque) como SQL Server
-/// (cuando el proyecto crezca). El proveedor se elige en Program.cs
-/// vía configuración (DatabaseProvider = "Sqlite" | "SqlServer").
+/// Proveedor: SQL Server. En desarrollo apunta a LocalDB y en producción a
+/// Azure SQL Database; la cadena se configura en Program.cs a partir de
+/// ConnectionStrings:Default.
 /// </summary>
 public class AppDbContext : IdentityDbContext<UsuarioAplicacion>
 {

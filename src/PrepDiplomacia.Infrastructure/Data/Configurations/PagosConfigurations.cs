@@ -10,8 +10,8 @@ public class PlanCursoConfiguration : IEntityTypeConfiguration<PlanCurso>
     {
         b.ToTable("Planes");
         b.HasIndex(x => x.Codigo).IsUnique();
-        // SQLite no tiene tipo decimal nativo: forzamos almacenamiento como TEXT con precisión.
-        b.Property(x => x.PrecioTotal).HasConversion<double>();
+        // SQL Server tiene decimal nativo: lo usamos con precisión monetaria explícita.
+        b.Property(x => x.PrecioTotal).HasColumnType("decimal(18,2)");
     }
 }
 
@@ -40,7 +40,7 @@ public class PagoConfiguration : IEntityTypeConfiguration<Pago>
         b.HasIndex(x => x.StripeSessionId);
         b.HasIndex(x => x.StripePaymentIntentId);
         b.HasIndex(x => x.StripeSubscriptionId);
-        b.Property(x => x.Monto).HasConversion<double>();
+        b.Property(x => x.Monto).HasColumnType("decimal(18,2)");
 
         b.HasOne(x => x.Inscripcion)
          .WithMany(i => i.Pagos)

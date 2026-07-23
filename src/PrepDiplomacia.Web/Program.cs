@@ -14,18 +14,45 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ── Configuración de servicios ──────────────────────────────────────────────
 
-// EF Core: SQLite por defecto; cambiar a SqlServer poniendo DatabaseProvider en config.
-var provider = builder.Configuration["DatabaseProvider"] ?? "Sqlite";
-var connectionString = builder.Configuration.GetConnectionString("Default")
-    ?? "Data Source=App_Data/prepdiplomacia.db";
+// EF Core sobre SQL Server: LocalDB en desarrollo, Azure SQL Database en producción.
+// La cadena se resuelve en este orden: variable de entorno / App Service settings
+// (ConnectionStrings__Default) > User Secrets > appsettings.json.
+var connectionString = builder.Configuration.GetConnectionString("Default");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    // Preferimos fallar al arrancar, con un mensaje claro, antes que quedar
+    // en un estado a medias sin base de datos.
+    throw new InvalidOperationException(
+        "Falta la cadena de conexión 'ConnectionStrings:Default'. " +
+        "En desarrollo se define en appsettings.json o en User Secrets; " +
+        "en Azure App Service, como Application Setting 'ConnectionStrings__Default'.");
+}
+
+// Salvaguarda: si se publica sin configurar la cadena real, la app apuntaría a
+// una base local inexistente en el servidor. Mejor detectarlo en el arranque.
+if (!builder.Environment.IsDevelopment() &&
+    connectionString.Contains("localdb", StringComparison.OrdinalIgnoreCase))
+{
+    throw new InvalidOperationException(
+        "La cadena de conexión apunta a LocalDB fuera del entorno de Desarrollo. " +
+        "Configurá 'ConnectionStrings__Default' con la cadena de Azure SQL Database.");
+}
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
-{
-    if (string.Equals(provider, "SqlServer", StringComparison.OrdinalIgnoreCase))
-        opt.UseSqlServer(connectionString);
-    else
-        opt.UseSqlite(connectionString);
-});
+    opt.UseSqlServer(connectionString, sql =>
+    {
+        // Azure SQL corta conexiones de forma transitoria (throttling, failover,
+        // reanudación tras pausa). Sin reintentos esos cortes llegan como error 500.
+        sql.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+
+        // El primer arranque tras un período de inactividad puede ser lento
+        // en los niveles Basic/Serverless.
+        sql.CommandTimeout(60);
+    }));
 
 // Identity con UI mínima propia (no usamos las páginas Razor de Identity, todo es MVC).
 builder.Services
@@ -124,14 +151,9 @@ app.MapControllerRoute(
 
 app.MapRazorPages(); // Identity utiliza algunas páginas Razor por convención.
 
-// Asegurar que existe la carpeta App_Data para la base SQLite.
-var appDataPath = Path.Combine(app.Environment.ContentRootPath, "App_Data");
-if (!Directory.Exists(appDataPath))
-{
-    Directory.CreateDirectory(appDataPath);
-}
-
 // ── Seed de datos iniciales ─────────────────────────────────────────────────
+// SeedInicial ejecuta db.Database.MigrateAsync(): al arrancar contra una base
+// vacía crea el esquema completo y siembra roles, admin, contenidos y planes.
 using (var scope = app.Services.CreateScope())
 {
     try

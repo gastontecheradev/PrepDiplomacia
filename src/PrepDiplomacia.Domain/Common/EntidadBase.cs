@@ -2,7 +2,7 @@ namespace PrepDiplomacia.Domain.Common;
 
 /// <summary>
 /// Clase base para entidades persistentes. Provee campos de auditoría
-/// y un Id de tipo int (AUTO_INCREMENT en SQLite/SQL Server).
+/// y un Id de tipo int (columna IDENTITY en SQL Server).
 /// </summary>
 public abstract class EntidadBase
 {
