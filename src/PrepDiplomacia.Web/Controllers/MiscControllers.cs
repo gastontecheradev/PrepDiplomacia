@@ -6,6 +6,7 @@ using PrepDiplomacia.Domain.Entities;
 using PrepDiplomacia.Infrastructure.Email;
 using PrepDiplomacia.Infrastructure.Identity;
 using PrepDiplomacia.Infrastructure.Services;
+using PrepDiplomacia.Infrastructure.Storage;
 using PrepDiplomacia.Web.Models.ViewModels;
 
 namespace PrepDiplomacia.Web.Controllers;
@@ -104,6 +105,64 @@ public class AreaAlumnosController : Controller
     {
         var usuario = await _userManager.GetUserAsync(User);
         return View(usuario);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DESCARGA DEL MATERIAL (PDF del programa)
+// ─────────────────────────────────────────────────────────────────────────────
+/// <summary>
+/// Sirve el PDF del programa forzando como nombre de descarga el nombre original
+/// del archivo (guardado en "programa.pdf.nombre"), en vez del GUID interno con
+/// el que se almacena en disco.
+///
+/// Al servirlo a través de una acción y no por la URL estática, el navegador ya
+/// no baja el archivo como "6aafcf...pdf". Este mismo enfoque seguirá funcionando
+/// cuando el almacenamiento se mueva a Azure Blob Storage.
+/// </summary>
+[Route("programa/material")]
+public class MaterialDescargaController : Controller
+{
+    public const string ClaveUrl    = "programa.pdf.url";
+    public const string ClaveNombre = "programa.pdf.nombre";
+
+    private readonly IContenidoService _contenido;
+    private readonly IWebHostEnvironment _env;
+
+    public MaterialDescargaController(IContenidoService contenido, IWebHostEnvironment env)
+    {
+        _contenido = contenido;
+        _env = env;
+    }
+
+    [HttpGet("")]
+    public async Task<IActionResult> Descargar()
+    {
+        var urlRelativa = await _contenido.ObtenerAsync(ClaveUrl);
+        if (string.IsNullOrWhiteSpace(urlRelativa))
+            return NotFound();
+
+        // Solo servimos archivos dentro de /uploads: evita que un valor manipulado
+        // apunte a otra parte del disco (path traversal).
+        if (!urlRelativa.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase))
+            return NotFound();
+
+        var rutaAbsoluta = Path.Combine(
+            _env.WebRootPath,
+            urlRelativa.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+
+        if (!System.IO.File.Exists(rutaAbsoluta))
+            return NotFound();
+
+        // Nombre con el que el navegador ofrecerá guardar el archivo.
+        var nombreDescarga = await _contenido.ObtenerAsync(ClaveNombre);
+        if (string.IsNullOrWhiteSpace(nombreDescarga))
+            nombreDescarga = "PrepDiplomacia-Programa.pdf";
+        if (!nombreDescarga.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            nombreDescarga += ".pdf";
+
+        var stream = System.IO.File.OpenRead(rutaAbsoluta);
+        return File(stream, "application/pdf", nombreDescarga);
     }
 }
 

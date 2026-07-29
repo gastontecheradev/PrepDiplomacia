@@ -22,6 +22,9 @@ public class MaterialController : Controller
     public const string ClaveUrl    = "programa.pdf.url";
     public const string ClaveNombre = "programa.pdf.nombre";
 
+    // PDF por defecto versionado en el repo: nunca se borra del disco.
+    public const string PdfPorDefecto = "/uploads/material/programa-prepdiplomacia.pdf";
+
     private readonly IContenidoService _contenido;
     private readonly IFileStorageService _storage;
 
@@ -58,9 +61,11 @@ public class MaterialController : Controller
                 return RedirectToAction(nameof(Index));
             }
 
-            // Borramos el PDF anterior para no acumular archivos huérfanos.
+            // Borramos el PDF anterior para no acumular archivos huérfanos,
+            // salvo que sea el PDF por defecto versionado en el repo.
             var anterior = await _contenido.ObtenerAsync(ClaveUrl);
-            if (!string.IsNullOrWhiteSpace(anterior))
+            if (!string.IsNullOrWhiteSpace(anterior) &&
+                !anterior.Equals(PdfPorDefecto, StringComparison.OrdinalIgnoreCase))
                 _storage.Eliminar(anterior);
 
             await _contenido.ActualizarPorClaveAsync(
@@ -87,7 +92,8 @@ public class MaterialController : Controller
     public async Task<IActionResult> Quitar()
     {
         var actual = await _contenido.ObtenerAsync(ClaveUrl);
-        if (!string.IsNullOrWhiteSpace(actual))
+        if (!string.IsNullOrWhiteSpace(actual) &&
+            !actual.Equals(PdfPorDefecto, StringComparison.OrdinalIgnoreCase))
             _storage.Eliminar(actual);
 
         await _contenido.ActualizarPorClaveAsync(ClaveUrl, "", "PDF del programa (URL)", "Programa");

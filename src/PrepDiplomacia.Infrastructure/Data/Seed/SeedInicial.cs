@@ -178,6 +178,21 @@ public static class SeedInicial
                     Seccion = "Programa", Tipo = "parrafo", Orden = 1,
                     Valor = "Seis meses de trabajo académico con cursado sincrónico, materiales propios y seguimiento individual en todas las instancias del concurso." },
 
+            // ── MATERIAL DESCARGABLE (PDF del programa) ──
+            // Apunta al PDF por defecto que viene versionado en el repo
+            // (wwwroot/uploads/material/programa-prepdiplomacia.pdf).
+            // El admin puede reemplazarlo desde Admin › Material descargable;
+            // al subir uno nuevo, estas dos claves se sobrescriben con el GUID
+            // y el nombre reales del archivo cargado.
+            new() { Clave = "programa.pdf.url", Etiqueta = "PDF del programa (URL)",
+                    Seccion = "Programa", Tipo = "texto", Orden = 2,
+                    Ayuda = "Se genera al subir el PDF desde Admin › Material descargable.",
+                    Valor = "/uploads/material/programa-prepdiplomacia.pdf" },
+            new() { Clave = "programa.pdf.nombre", Etiqueta = "PDF del programa (nombre)",
+                    Seccion = "Programa", Tipo = "texto", Orden = 3,
+                    Ayuda = "Nombre del archivo original, solo informativo.",
+                    Valor = "Programa PrepDiplomacia 2027.pdf" },
+
             // ── CONTACTO ──
             new() { Clave = "contacto.email", Etiqueta = "Email de contacto público",
                     Seccion = "Contacto", Tipo = "texto", Orden = 1,
